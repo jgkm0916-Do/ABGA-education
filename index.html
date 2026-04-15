@@ -737,6 +737,52 @@
   margin-bottom: 4px;
   color: #123a63;
 }
+  .result-card.main {
+  background: #fff4f4;
+  border: 1px solid #f3caca;
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.08);
+}
+
+.result-card.comp {
+  background: #f4f8ff;
+  border: 1px solid #d6e4f7;
+}
+
+.result-card.extra {
+  background: #f8fbff;
+  border: 1px solid #dbe7f2;
+}
+
+.result-card.summary {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+  .tab-btn {
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.18s ease;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #123a63, #1f5d99);
+  color: #fff;
+  border-color: #123a63;
+  box-shadow: 0 8px 18px rgba(18, 58, 99, 0.18);
+  transform: translateY(-1px);
+}
+  .result-badge {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #eef4fb;
+  border: 1px solid #d6e4f7;
+  font-size: 15px;
+  font-weight: 800;
+  color: #123a63;
+}
   
   </style>
 </head>
@@ -1173,20 +1219,22 @@
   <div class="abga-auto-card">
     <div class="abga-input-grid">
       <div class="abga-input-item">
-        <label for="phInput">pH</label>
-        <input type="number" id="phInput" step="0.01" placeholder="예: 7.28">
-      </div>
+  <label for="phInput">pH</label>
+  <div class="input-hint">정상범위 7.35 ~ 7.45</div>
+  <input type="number" id="phInput" step="0.01" placeholder="예: 7.28">
+</div>
+
+     <div class="abga-input-item">
+  <label for="co2Input">PaCO₂ (mmHg)</label>
+  <div class="input-hint">정상범위 35 ~ 45</div>
+  <input type="number" id="co2Input" step="0.1" placeholder="예: 55">
+</div>
 
       <div class="abga-input-item">
-        <label for="co2Input">PaCO₂ (mmHg)</label>
-        <input type="number" id="co2Input" step="0.1" placeholder="예: 55">
-      </div>
-
-      <div class="abga-input-item">
-        <label for="hco3Input">HCO₃⁻ (mEq/L)</label>
-        <input type="number" id="hco3Input" step="0.1" placeholder="예: 24">
-      </div>
-    </div>
+  <label for="hco3Input">HCO₃⁻ (mEq/L)</label>
+  <div class="input-hint">정상범위 22 ~ 26</div>
+  <input type="number" id="hco3Input" step="0.1" placeholder="예: 24">
+</div>
 
     <div class="abga-btn-row">
       <button class="analyze-btn" onclick="analyzeAdvancedABG()">해석하기</button>
@@ -1819,30 +1867,45 @@ function analyzeAdvancedABG() {
 
   summaryText = `pH ${ph.toFixed(2)}, PaCO₂ ${co2.toFixed(1)} mmHg, HCO₃⁻ ${hco3.toFixed(1)} mEq/L`;
 
-  resultBox.innerHTML = `
-    <div class="result-section">
-      <div class="result-card main">
-        <div class="result-card-title">주된 해석</div>
-        <div class="result-card-body">${primaryDisorder}</div>
-      </div>
+  const resultBadge = `<div class="result-badge">${primaryDisorder}</div>`;
 
-      <div class="result-card comp">
-        <div class="result-card-title">보상 평가</div>
-        <div class="result-card-body">${compensationText}</div>
-      </div>
+resultBox.innerHTML = `
+  ${resultBadge}
 
-      <div class="result-card extra">
-        <div class="result-card-title">추가 설명</div>
-        <div class="result-card-body">${extraText}</div>
-      </div>
+  <div class="result-section">
 
-      <div class="result-card summary">
-        <div class="result-card-title">입력값 요약</div>
-        <div class="result-card-body">${summaryText}</div>
+    <div class="result-card main">
+      <div class="result-card-title">주된 해석</div>
+      <div class="result-card-body">
+        ABGA 해석 결과, 위와 같은 산-염기 이상이 확인됩니다.
       </div>
     </div>
-  `;
-  renderNursingIntervention(nursingType); 
+
+    <div class="result-card comp">
+      <div class="result-card-title">보상 평가</div>
+      <div class="result-card-body">
+        ${compensationText}
+      </div>
+    </div>
+
+    <div class="result-card extra">
+      <div class="result-card-title">추가 설명</div>
+      <div class="result-card-body">
+        ${extraText}
+      </div>
+    </div>
+
+    <div class="result-card summary">
+      <div class="result-card-title">입력값 요약</div>
+      <div class="result-card-body">
+        ${summaryText}
+      </div>
+    </div>
+
+  </div>
+`;
+
+renderNursingIntervention(nursingType); 
 }
 
     initializeQuiz();
