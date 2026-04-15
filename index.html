@@ -659,7 +659,52 @@
   .abga-input-grid {
     grid-template-columns: 1fr;
   }
-}  
+
+  .result-section {
+  margin-top: 18px;
+}
+
+.result-card {
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #d8e4f0;
+  background: #ffffff;
+}
+
+.result-card-title {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #143f6b;
+}
+
+.result-card-body {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #1f3552;
+}
+
+.result-card.main {
+  background: #fff4f4;
+  border-color: #f3caca;
+}
+
+.result-card.comp {
+  background: #f4f8ff;
+  border-color: #d6e4f7;
+}
+
+.result-card.extra {
+  background: #f8fbff;
+  border-color: #dbe7f2;
+}
+
+.result-card.summary {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+}
+
   </style>
 </head>
 <body>
@@ -1218,7 +1263,8 @@ function analyzeAdvancedABG() {
   let lines = [];
   let primaryDisorder = '';
   let compensationText = '';
-  let mixedText = '';
+  let extraText = '';
+  let summaryText = '';
 
   const phLow = ph < 7.35;
   const phHigh = ph > 7.45;
@@ -1229,14 +1275,11 @@ function analyzeAdvancedABG() {
   const hco3High = hco3 > 26;
   const hco3Low = hco3 < 22;
 
-  lines.push('<span class="result-title">자동 해석 결과</span>');
-
   if (phLow) {
-    lines.push(`1) pH 판독: <span class="result-highlight">산증</span>입니다. (pH ${ph.toFixed(2)})`);
+    lines.push(`pH ${ph.toFixed(2)}로 산증입니다.`);
 
     if (co2High && !hco3Low) {
-      primaryDisorder = '호흡성 산증';
-      lines.push(`2) 주된 장애: <span class="result-highlight">${primaryDisorder}</span>으로 해석됩니다.`);
+      primaryDisorder = '호흡성 산증으로 해석됩니다.';
 
       const acuteExpected = 24 + ((co2 - 40) / 10) * 1;
       const chronicExpected = 24 + ((co2 - 40) / 10) * 3.5;
@@ -1244,58 +1287,53 @@ function analyzeAdvancedABG() {
       const diffAcute = Math.abs(hco3 - acuteExpected);
       const diffChronic = Math.abs(hco3 - chronicExpected);
 
-      lines.push(`3) 보상 평가:`);
-      lines.push(`- Acute respiratory acidosis 예상 HCO₃⁻ ≈ ${acuteExpected.toFixed(1)} mEq/L`);
-      lines.push(`- Chronic respiratory acidosis 예상 HCO₃⁻ ≈ ${chronicExpected.toFixed(1)} mEq/L`);
-
       if (diffAcute <= 2 && diffAcute < diffChronic) {
-        compensationText = '급성 호흡성 산증에 합당한 보상반응으로 보입니다.';
+        compensationText = `급성 호흡성 산증에 합당한 보상반응으로 보입니다. 예상 HCO₃⁻는 약 ${acuteExpected.toFixed(1)} mEq/L입니다.`;
       } else if (diffChronic <= 3 && diffChronic < diffAcute) {
-        compensationText = '만성 호흡성 산증에 합당한 보상반응으로 보입니다.';
+        compensationText = `만성 호흡성 산증에 합당한 보상반응으로 보입니다. 예상 HCO₃⁻는 약 ${chronicExpected.toFixed(1)} mEq/L입니다.`;
       } else {
         compensationText = '예상 보상범위를 벗어나 혼합장애 가능성이 있습니다.';
       }
-      lines.push(`- ${compensationText}`);
+
+      extraText = 'PaCO₂ 상승이 산증 방향으로 작용하고 있습니다.';
     }
 
     else if (hco3Low && !co2High) {
-      primaryDisorder = '대사성 산증';
-      lines.push(`2) 주된 장애: <span class="result-highlight">${primaryDisorder}</span>으로 해석됩니다.`);
+      primaryDisorder = '대사성 산증으로 해석됩니다.';
 
       const winterLow = 1.5 * hco3 + 8 - 2;
       const winterHigh = 1.5 * hco3 + 8 + 2;
       const winterMid = 1.5 * hco3 + 8;
 
-      lines.push(`3) 보상 평가 (Winter 공식):`);
-      lines.push(`- 예상 PaCO₂ ≈ ${winterMid.toFixed(1)} mmHg (허용범위 ${winterLow.toFixed(1)} ~ ${winterHigh.toFixed(1)})`);
-
       if (co2 >= winterLow && co2 <= winterHigh) {
-        compensationText = '적절한 호흡성 보상으로 보입니다.';
+        compensationText = `Winter 공식상 적절한 호흡성 보상으로 보입니다. 예상 PaCO₂는 약 ${winterMid.toFixed(1)} mmHg입니다.`;
       } else if (co2 > winterHigh) {
-        compensationText = '예상보다 PaCO₂가 높아 동반 호흡성 산증 가능성이 있습니다.';
+        compensationText = `예상보다 PaCO₂가 높아 동반 호흡성 산증 가능성이 있습니다. 예상 PaCO₂ 범위는 ${winterLow.toFixed(1)} ~ ${winterHigh.toFixed(1)} mmHg입니다.`;
       } else {
-        compensationText = '예상보다 PaCO₂가 낮아 동반 호흡성 알칼리증 가능성이 있습니다.';
+        compensationText = `예상보다 PaCO₂가 낮아 동반 호흡성 알칼리증 가능성이 있습니다. 예상 PaCO₂ 범위는 ${winterLow.toFixed(1)} ~ ${winterHigh.toFixed(1)} mmHg입니다.`;
       }
-      lines.push(`- ${compensationText}`);
+
+      extraText = 'HCO₃⁻ 저하가 산증 방향으로 작용하고 있습니다.';
     }
 
     else if (co2High && hco3Low) {
-      primaryDisorder = '복합성 산증';
-      lines.push(`2) 주된 장애: <span class="result-highlight">${primaryDisorder}</span>이 의심됩니다.`);
-      lines.push(`3) 보상 평가: PaCO₂ 상승과 HCO₃⁻ 저하가 동시에 산증 방향으로 작용하여 혼합장애 가능성이 큽니다.`);
+      primaryDisorder = '복합성 산증이 의심됩니다.';
+      compensationText = '단순 보상으로 설명하기 어렵습니다.';
+      extraText = 'PaCO₂ 상승과 HCO₃⁻ 저하가 동시에 산증 방향으로 작용하여 혼합장애 가능성이 큽니다.';
     }
 
     else {
-      lines.push(`2) 주된 장애: 단순 패턴으로 분류되지 않아 추가 판단이 필요합니다.`);
+      primaryDisorder = '단순 패턴으로 분류되지 않아 추가 판단이 필요합니다.';
+      compensationText = '보상 여부를 단순하게 분류하기 어렵습니다.';
+      extraText = '임상 맥락과 추가 검사 결과를 함께 봐야 합니다.';
     }
   }
 
   else if (phHigh) {
-    lines.push(`1) pH 판독: <span class="result-highlight">알칼리증</span>입니다. (pH ${ph.toFixed(2)})`);
+    lines.push(`pH ${ph.toFixed(2)}로 알칼리증입니다.`);
 
     if (co2Low && !hco3High) {
-      primaryDisorder = '호흡성 알칼리증';
-      lines.push(`2) 주된 장애: <span class="result-highlight">${primaryDisorder}</span>으로 해석됩니다.`);
+      primaryDisorder = '호흡성 알칼리증으로 해석됩니다.';
 
       const acuteExpected = 24 - ((40 - co2) / 10) * 2;
       const chronicExpected = 24 - ((40 - co2) / 10) * 5;
@@ -1303,73 +1341,92 @@ function analyzeAdvancedABG() {
       const diffAcute = Math.abs(hco3 - acuteExpected);
       const diffChronic = Math.abs(hco3 - chronicExpected);
 
-      lines.push(`3) 보상 평가:`);
-      lines.push(`- Acute respiratory alkalosis 예상 HCO₃⁻ ≈ ${acuteExpected.toFixed(1)} mEq/L`);
-      lines.push(`- Chronic respiratory alkalosis 예상 HCO₃⁻ ≈ ${chronicExpected.toFixed(1)} mEq/L`);
-
       if (diffAcute <= 2 && diffAcute < diffChronic) {
-        compensationText = '급성 호흡성 알칼리증에 합당한 보상반응으로 보입니다.';
+        compensationText = `급성 호흡성 알칼리증에 합당한 보상반응으로 보입니다. 예상 HCO₃⁻는 약 ${acuteExpected.toFixed(1)} mEq/L입니다.`;
       } else if (diffChronic <= 3 && diffChronic < diffAcute) {
-        compensationText = '만성 호흡성 알칼리증에 합당한 보상반응으로 보입니다.';
+        compensationText = `만성 호흡성 알칼리증에 합당한 보상반응으로 보입니다. 예상 HCO₃⁻는 약 ${chronicExpected.toFixed(1)} mEq/L입니다.`;
       } else {
         compensationText = '예상 보상범위를 벗어나 혼합장애 가능성이 있습니다.';
       }
-      lines.push(`- ${compensationText}`);
+
+      extraText = 'PaCO₂ 저하가 알칼리 방향으로 작용하고 있습니다.';
     }
 
     else if (hco3High && !co2Low) {
-      primaryDisorder = '대사성 알칼리증';
-      lines.push(`2) 주된 장애: <span class="result-highlight">${primaryDisorder}</span>으로 해석됩니다.`);
+      primaryDisorder = '대사성 알칼리증으로 해석됩니다.';
 
       const expectedLow = 0.7 * (hco3 - 24) + 40 - 5;
       const expectedHigh = 0.7 * (hco3 - 24) + 40 + 5;
       const expectedMid = 0.7 * (hco3 - 24) + 40;
 
-      lines.push(`3) 보상 평가:`);
-      lines.push(`- 예상 PaCO₂ ≈ ${expectedMid.toFixed(1)} mmHg (허용범위 ${expectedLow.toFixed(1)} ~ ${expectedHigh.toFixed(1)})`);
-
       if (co2 >= expectedLow && co2 <= expectedHigh) {
-        compensationText = '적절한 호흡성 보상으로 보입니다.';
+        compensationText = `적절한 호흡성 보상으로 보입니다. 예상 PaCO₂는 약 ${expectedMid.toFixed(1)} mmHg입니다.`;
       } else if (co2 > expectedHigh) {
-        compensationText = '예상보다 PaCO₂가 높아 동반 호흡성 산증 가능성이 있습니다.';
+        compensationText = `예상보다 PaCO₂가 높아 동반 호흡성 산증 가능성이 있습니다. 예상 PaCO₂ 범위는 ${expectedLow.toFixed(1)} ~ ${expectedHigh.toFixed(1)} mmHg입니다.`;
       } else {
-        compensationText = '예상보다 PaCO₂가 낮아 동반 호흡성 알칼리증 가능성이 있습니다.';
+        compensationText = `예상보다 PaCO₂가 낮아 동반 호흡성 알칼리증 가능성이 있습니다. 예상 PaCO₂ 범위는 ${expectedLow.toFixed(1)} ~ ${expectedHigh.toFixed(1)} mmHg입니다.`;
       }
-      lines.push(`- ${compensationText}`);
+
+      extraText = 'HCO₃⁻ 상승이 알칼리 방향으로 작용하고 있습니다.';
     }
 
     else if (co2Low && hco3High) {
-      primaryDisorder = '복합성 알칼리증';
-      lines.push(`2) 주된 장애: <span class="result-highlight">${primaryDisorder}</span>이 의심됩니다.`);
-      lines.push(`3) 보상 평가: PaCO₂ 저하와 HCO₃⁻ 상승이 동시에 알칼리 방향으로 작용하여 혼합장애 가능성이 큽니다.`);
+      primaryDisorder = '복합성 알칼리증이 의심됩니다.';
+      compensationText = '단순 보상으로 설명하기 어렵습니다.';
+      extraText = 'PaCO₂ 저하와 HCO₃⁻ 상승이 동시에 알칼리 방향으로 작용하여 혼합장애 가능성이 큽니다.';
     }
 
     else {
-      lines.push(`2) 주된 장애: 단순 패턴으로 분류되지 않아 추가 판단이 필요합니다.`);
+      primaryDisorder = '단순 패턴으로 분류되지 않아 추가 판단이 필요합니다.';
+      compensationText = '보상 여부를 단순하게 분류하기 어렵습니다.';
+      extraText = '임상 맥락과 추가 검사 결과를 함께 봐야 합니다.';
     }
   }
 
   else {
-    lines.push(`1) pH 판독: <span class="result-highlight">정상 범위</span>입니다. (pH ${ph.toFixed(2)})`);
+    lines.push(`pH ${ph.toFixed(2)}로 정상 범위입니다.`);
 
     if (co2High && hco3High) {
-      lines.push(`2) 주된 장애: 보상된 <span class="result-highlight">호흡성 산증</span> 또는 혼합장애 가능성이 있습니다.`);
+      primaryDisorder = '보상된 호흡성 산증 또는 혼합장애 가능성이 있습니다.';
     } else if (co2Low && hco3Low) {
-      lines.push(`2) 주된 장애: 보상된 <span class="result-highlight">호흡성 알칼리증</span> 또는 혼합장애 가능성이 있습니다.`);
+      primaryDisorder = '보상된 호흡성 알칼리증 또는 혼합장애 가능성이 있습니다.';
     } else if (co2Low && hco3High) {
-      lines.push(`2) 주된 장애: <span class="result-highlight">혼합형 알칼리증</span> 가능성이 있습니다.`);
+      primaryDisorder = '혼합형 알칼리증 가능성이 있습니다.';
     } else if (co2High && hco3Low) {
-      lines.push(`2) 주된 장애: <span class="result-highlight">혼합형 산증</span> 가능성이 있습니다.`);
+      primaryDisorder = '혼합형 산증 가능성이 있습니다.';
     } else {
-      lines.push(`2) 주된 장애: 뚜렷한 산-염기 장애가 보이지 않습니다.`);
+      primaryDisorder = '뚜렷한 산-염기 장애가 보이지 않습니다.';
     }
 
-    lines.push(`3) 참고: pH가 정상이어도 보상된 장애 또는 혼합장애가 숨어 있을 수 있습니다.`);
+    compensationText = 'pH가 정상이어도 보상된 장애가 숨어 있을 수 있습니다.';
+    extraText = 'PaCO₂와 HCO₃⁻를 함께 보고 혼합장애 가능성을 고려해야 합니다.';
   }
 
-  lines.push(`4) 입력값 요약: pH ${ph.toFixed(2)}, PaCO₂ ${co2.toFixed(1)} mmHg, HCO₃⁻ ${hco3.toFixed(1)} mEq/L`);
+  summaryText = `pH ${ph.toFixed(2)}, PaCO₂ ${co2.toFixed(1)} mmHg, HCO₃⁻ ${hco3.toFixed(1)} mEq/L`;
 
-  resultBox.innerHTML = lines.join('<br>');
+  resultBox.innerHTML = `
+    <div class="result-section">
+      <div class="result-card main">
+        <div class="result-card-title">주된 해석</div>
+        <div class="result-card-body">${primaryDisorder}</div>
+      </div>
+
+      <div class="result-card comp">
+        <div class="result-card-title">보상 평가</div>
+        <div class="result-card-body">${compensationText}</div>
+      </div>
+
+      <div class="result-card extra">
+        <div class="result-card-title">추가 설명</div>
+        <div class="result-card-body">${extraText}</div>
+      </div>
+
+      <div class="result-card summary">
+        <div class="result-card-title">입력값 요약</div>
+        <div class="result-card-body">${summaryText}</div>
+      </div>
+    </div>
+  `;
 }
 
     initializeQuiz();
