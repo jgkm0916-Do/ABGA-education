@@ -728,6 +728,27 @@
 .result-card {
   margin-bottom: 0;
 }
+.tab-bar {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tab-btn {
+  position: relative;
+  z-index: 21;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.hero,
+.section,
+.card,
+.container {
+  position: relative;
+}
 
   </style>
 </head>
@@ -746,7 +767,7 @@
       <button class="tab-btn" onclick="showTab('compensation', this)">보상반응</button>
       <button class="tab-btn" onclick="showTab('cases', this)">임상 케이스</button>
       <button class="tab-btn" onclick="showTab('quiz', this)">퀴즈</button>
-      <button class="tab-btn" onclick="showTab('auto-advanced')">자동 해석</button>
+      <button class="tab-btn" onclick="showTab('auto-advanced', this)">자동 해석</button>
     </div>
 
     <section id="basic" class="panel active">
