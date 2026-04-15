@@ -854,59 +854,58 @@
     </section>
 
     <section id="interpret" class="panel">
-      <h2 class="section-title">해석 훈련</h2>
-      <p class="section-desc">순서대로 생각하는 연습을 통해 ABGA 해석 흐름을 몸에 익힙니다.</p>
+  <h2 class="section-title">해석 훈련</h2>
+  <p class="section-desc">순서대로 생각하는 연습을 통해 ABGA 해석 흐름을 몸에 익힙니다.</p>
 
-      <div class="grid-2">
-        <div class="card">
-          <h3>연습용 수치</h3>
-          <div class="abga-box">
-            <div class="abga-chip"><strong>pH</strong>7.28</div>
-            <div class="abga-chip"><strong>PaCO₂</strong>55 mmHg</div>
-            <div class="abga-chip"><strong>HCO₃⁻</strong>24 mEq/L</div>
-          </div>
-          <p>위 수치를 보고 단계별로 해석해보세요.</p>
-        </div>
+  <div class="card" style="margin-bottom:14px;">
+    <h3>훈련 예시 선택</h3>
+    <div class="option-row">
+      <button class="option-btn" onclick="loadInterpretCase('case1')">예시 1. 호흡성 산증</button>
+      <button class="option-btn" onclick="loadInterpretCase('case2')">예시 2. 대사성 산증</button>
+      <button class="option-btn" onclick="loadInterpretCase('case3')">예시 3. 호흡성 알칼리증</button>
+      <button class="option-btn" onclick="loadInterpretCase('case4')">예시 4. 대사성 알칼리증</button>
+    </div>
+  </div>
 
-        <div class="card">
-          <h3>핵심 포인트</h3>
-          <p>1. pH로 방향부터 확인합니다.</p>
-          <p>2. PaCO₂가 같은 방향이면 호흡성입니다.</p>
-          <p>3. HCO₃⁻가 같은 방향이면 대사성입니다.</p>
-        </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>연습용 수치</h3>
+      <div class="abga-box" id="interpretAbgaBox">
+        <div class="abga-chip"><strong>pH</strong><span id="iPh">7.28</span></div>
+        <div class="abga-chip"><strong>PaCO₂</strong><span id="iCo2">55 mmHg</span></div>
+        <div class="abga-chip"><strong>HCO₃⁻</strong><span id="iHco3">24 mEq/L</span></div>
       </div>
+      <p id="interpretGuide">위 수치를 보고 단계별로 해석해보세요.</p>
+    </div>
 
-      <div class="step-wrap" style="margin-top:14px;">
-        <div class="step-card">
-          <h3>STEP 1. pH 방향은?</h3>
-          <div class="option-row">
-            <button class="option-btn" onclick="showStepFeedback('step1', true, '맞습니다. pH 7.28은 7.35보다 낮으므로 산증입니다.')">산증</button>
-            <button class="option-btn" onclick="showStepFeedback('step1', false, '다시 보세요. pH 7.28은 7.35보다 낮으므로 산증입니다.')">알칼리증</button>
-          </div>
-          <div id="step1" class="feedback"></div>
-        </div>
+    <div class="card">
+      <h3>핵심 포인트</h3>
+      <p>1. pH로 방향부터 확인합니다.</p>
+      <p>2. PaCO₂가 같은 방향이면 호흡성입니다.</p>
+      <p>3. HCO₃⁻가 같은 방향이면 대사성입니다.</p>
+    </div>
+  </div>
 
-        <div class="step-card">
-          <h3>STEP 2. PaCO₂는 어떤 방향인가?</h3>
-          <div class="option-row">
-            <button class="option-btn" onclick="showStepFeedback('step2', true, '맞습니다. PaCO₂ 55는 증가되어 있고 산성 방향이므로 호흡성 원인을 시사합니다.')">산성 방향</button>
-            <button class="option-btn" onclick="showStepFeedback('step2', false, 'PaCO₂ 55는 증가된 상태입니다. 증가한 CO₂는 산성 방향입니다.')">알칼리 방향</button>
-          </div>
-          <div id="step2" class="feedback"></div>
-        </div>
+  <div class="step-wrap" style="margin-top:14px;">
+    <div class="step-card">
+      <h3>STEP 1. pH 방향은?</h3>
+      <div class="option-row" id="step1Options"></div>
+      <div id="step1" class="feedback"></div>
+    </div>
 
-        <div class="step-card">
-          <h3>STEP 3. 최종 해석은?</h3>
-          <div class="option-row">
-            <button class="option-btn" onclick="showStepFeedback('step3', true, '정답입니다. pH는 산증, PaCO₂도 산성 방향이므로 호흡성 산증입니다.')">호흡성 산증</button>
-            <button class="option-btn" onclick="showStepFeedback('step3', false, 'HCO₃⁻는 정상에 가깝고, 핵심은 PaCO₂ 증가입니다. 호흡성 산증입니다.')">대사성 산증</button>
-            <button class="option-btn" onclick="showStepFeedback('step3', false, 'pH가 낮으므로 알칼리증은 아닙니다.')">호흡성 알칼리증</button>
-            <button class="option-btn" onclick="showStepFeedback('step3', false, 'pH가 낮으므로 대사성 알칼리증은 아닙니다.')">대사성 알칼리증</button>
-          </div>
-          <div id="step3" class="feedback"></div>
-        </div>
-      </div>
-    </section>
+    <div class="step-card">
+      <h3>STEP 2. PaCO₂ 또는 HCO₃⁻는 어떤 방향인가?</h3>
+      <div class="option-row" id="step2Options"></div>
+      <div id="step2" class="feedback"></div>
+    </div>
+
+    <div class="step-card">
+      <h3>STEP 3. 최종 해석은?</h3>
+      <div class="option-row" id="step3Options"></div>
+      <div id="step3" class="feedback"></div>
+    </div>
+  </div>
+</section>
 
    <section id="compensation" class="panel">
   <h2 class="section-title">보상반응</h2>
@@ -1228,7 +1227,129 @@
       box.className = "feedback show " + (isCorrect ? "good" : "bad");
       box.textContent = text;
     }
+const interpretCases = {
+  case1: {
+    ph: "7.28",
+    co2: "55 mmHg",
+    hco3: "24 mEq/L",
+    guide: "예시 1: 호흡성 산증 패턴입니다. 단계별로 판단해보세요.",
+    step1: [
+      { text: "산증", correct: true, msg: "맞습니다. pH 7.28은 7.35보다 낮으므로 산증입니다." },
+      { text: "알칼리증", correct: false, msg: "다시 보세요. pH 7.28은 7.35보다 낮으므로 산증입니다." }
+    ],
+    step2: [
+      { text: "산성 방향", correct: true, msg: "맞습니다. PaCO₂ 55는 증가되어 있고 산성 방향입니다." },
+      { text: "알칼리 방향", correct: false, msg: "PaCO₂ 55는 증가되어 있으므로 산성 방향입니다." }
+    ],
+    step3: [
+      { text: "호흡성 산증", correct: true, msg: "정답입니다. pH는 산증, PaCO₂도 산성 방향이므로 호흡성 산증입니다." },
+      { text: "대사성 산증", correct: false, msg: "HCO₃⁻는 정상 범위에 가깝고 핵심은 PaCO₂ 증가입니다." },
+      { text: "호흡성 알칼리증", correct: false, msg: "pH가 낮으므로 알칼리증은 아닙니다." },
+      { text: "대사성 알칼리증", correct: false, msg: "pH가 낮으므로 대사성 알칼리증은 아닙니다." }
+    ]
+  },
 
+  case2: {
+    ph: "7.30",
+    co2: "40 mmHg",
+    hco3: "18 mEq/L",
+    guide: "예시 2: 대사성 산증 패턴입니다. 단계별로 판단해보세요.",
+    step1: [
+      { text: "산증", correct: true, msg: "맞습니다. pH 7.30은 7.35보다 낮으므로 산증입니다." },
+      { text: "알칼리증", correct: false, msg: "다시 보세요. pH 7.30은 산증입니다." }
+    ],
+    step2: [
+      { text: "산성 방향", correct: true, msg: "맞습니다. HCO₃⁻ 18은 감소되어 산성 방향입니다." },
+      { text: "알칼리 방향", correct: false, msg: "HCO₃⁻ 18은 감소되어 있으므로 산성 방향입니다." }
+    ],
+    step3: [
+      { text: "호흡성 산증", correct: false, msg: "PaCO₂는 정상 범위입니다. 핵심 이상은 HCO₃⁻ 감소입니다." },
+      { text: "대사성 산증", correct: true, msg: "정답입니다. pH는 산증, HCO₃⁻도 산성 방향이므로 대사성 산증입니다." },
+      { text: "호흡성 알칼리증", correct: false, msg: "pH가 낮으므로 알칼리증은 아닙니다." },
+      { text: "대사성 알칼리증", correct: false, msg: "HCO₃⁻는 증가가 아니라 감소입니다." }
+    ]
+  },
+
+  case3: {
+    ph: "7.50",
+    co2: "30 mmHg",
+    hco3: "24 mEq/L",
+    guide: "예시 3: 호흡성 알칼리증 패턴입니다. 단계별로 판단해보세요.",
+    step1: [
+      { text: "산증", correct: false, msg: "다시 보세요. pH 7.50은 7.45보다 높으므로 알칼리증입니다." },
+      { text: "알칼리증", correct: true, msg: "맞습니다. pH 7.50은 알칼리증입니다." }
+    ],
+    step2: [
+      { text: "산성 방향", correct: false, msg: "PaCO₂ 30은 감소되어 알칼리 방향입니다." },
+      { text: "알칼리 방향", correct: true, msg: "맞습니다. PaCO₂ 30은 감소되어 알칼리 방향입니다." }
+    ],
+    step3: [
+      { text: "호흡성 산증", correct: false, msg: "PaCO₂는 증가가 아니라 감소입니다." },
+      { text: "대사성 산증", correct: false, msg: "알칼리증이므로 산증은 아닙니다." },
+      { text: "호흡성 알칼리증", correct: true, msg: "정답입니다. pH는 알칼리증, PaCO₂도 알칼리 방향이므로 호흡성 알칼리증입니다." },
+      { text: "대사성 알칼리증", correct: false, msg: "HCO₃⁻는 정상 범위에 가깝고 핵심은 PaCO₂ 감소입니다." }
+    ]
+  },
+
+  case4: {
+    ph: "7.48",
+    co2: "40 mmHg",
+    hco3: "30 mEq/L",
+    guide: "예시 4: 대사성 알칼리증 패턴입니다. 단계별로 판단해보세요.",
+    step1: [
+      { text: "산증", correct: false, msg: "다시 보세요. pH 7.48은 알칼리증입니다." },
+      { text: "알칼리증", correct: true, msg: "맞습니다. pH 7.48은 알칼리증입니다." }
+    ],
+    step2: [
+      { text: "산성 방향", correct: false, msg: "HCO₃⁻ 30은 증가되어 알칼리 방향입니다." },
+      { text: "알칼리 방향", correct: true, msg: "맞습니다. HCO₃⁻ 30은 증가되어 알칼리 방향입니다." }
+    ],
+    step3: [
+      { text: "호흡성 산증", correct: false, msg: "알칼리증이므로 호흡성 산증은 아닙니다." },
+      { text: "대사성 산증", correct: false, msg: "HCO₃⁻는 감소가 아니라 증가입니다." },
+      { text: "호흡성 알칼리증", correct: false, msg: "핵심 이상은 PaCO₂가 아니라 HCO₃⁻ 증가입니다." },
+      { text: "대사성 알칼리증", correct: true, msg: "정답입니다. pH는 알칼리증, HCO₃⁻도 알칼리 방향이므로 대사성 알칼리증입니다." }
+    ]
+  }
+};
+
+function renderInterpretOptions(containerId, feedbackId, options) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+
+  options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = option.text;
+    btn.onclick = () => showStepFeedback(feedbackId, option.correct, option.msg);
+    container.appendChild(btn);
+  });
+}
+
+function resetInterpretFeedback() {
+  ["step1", "step2", "step3"].forEach(id => {
+    const box = document.getElementById(id);
+    box.className = "feedback";
+    box.textContent = "";
+  });
+}
+
+function loadInterpretCase(caseKey) {
+  const data = interpretCases[caseKey];
+  if (!data) return;
+
+  document.getElementById("iPh").textContent = data.ph;
+  document.getElementById("iCo2").textContent = data.co2;
+  document.getElementById("iHco3").textContent = data.hco3;
+  document.getElementById("interpretGuide").textContent = data.guide;
+
+  renderInterpretOptions("step1Options", "step1", data.step1);
+  renderInterpretOptions("step2Options", "step2", data.step2);
+  renderInterpretOptions("step3Options", "step3", data.step3);
+
+  resetInterpretFeedback();
+}
+    
     const questionBank = [
       { type: "단순 해석", q: "pH 7.28 / PaCO₂ 55 / HCO₃⁻ 24 의 해석은?", choices: ["호흡성 산증", "호흡성 알칼리증", "대사성 산증", "대사성 알칼리증"], answer: 0, exp: "pH는 산증이고, PaCO₂가 증가하여 같은 방향이므로 호흡성 산증입니다." },
       { type: "단순 해석", q: "pH 7.50 / PaCO₂ 30 / HCO₃⁻ 24 의 해석은?", choices: ["호흡성 산증", "호흡성 알칼리증", "대사성 산증", "정상"], answer: 1, exp: "pH는 알칼리증이며, PaCO₂가 감소하여 알칼리 방향이므로 호흡성 알칼리증입니다." },
@@ -1383,6 +1504,7 @@
 
     function restartQuiz() {
       initializeQuiz();
+      loadInterpretCase("case1");
     
     }
     function resetAdvancedABG() {
