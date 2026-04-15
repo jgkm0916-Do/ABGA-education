@@ -804,88 +804,67 @@
       <button class="tab-btn" onclick="showTab('quiz', this)">퀴즈</button>
       <button class="tab-btn" onclick="showTab('auto-advanced', this)">자동 해석</button>
     </div>
-
     <section id="basic" class="panel active">
-      <h2 class="section-title">기초 학습</h2>
-      <p class="section-desc">ABGA 해석에 필요한 핵심 개념만 먼저 빠르게 정리합니다.</p>
+  <h2 class="section-title">기초 학습</h2>
+  <p class="section-desc">ABGA 해석 전에 꼭 알아야 할 기본 개념을 먼저 정리합니다.</p>
 
-      <details class="edu-item" open>
-        <summary>pH</summary>
-        <p>정상 범위는 <strong>7.35~7.45</strong>입니다.</p>
-        <p><strong>7.35보다 낮으면 산증</strong>, <strong>7.45보다 높으면 알칼리증</strong>입니다.</p>
-        <div class="badge-row">
-          <span class="badge">정상 7.35~7.45</span>
-          <span class="badge">↓ 산증</span>
-          <span class="badge">↑ 알칼리증</span>
-        </div>
-      </details>
+  <!-- 정상수치표 -->
+  <details class="edu-item" open>
+    <summary>정상수치 정리</summary>
+    <p class="table-description">ABGA 해석 전에 반드시 확인해야 하는 기본 정상 범위입니다.</p>
 
-      <details class="edu-item">
-        <summary>PaCO₂</summary>
-        <p>PaCO₂는 <strong>호흡성 요인</strong>을 반영합니다.</p>
-        <p>증가하면 <strong>산성 방향</strong>, 감소하면 <strong>알칼리 방향</strong>으로 작용합니다.</p>
-        <div class="badge-row">
-          <span class="badge">정상 35~45mmHg</span>
-          <span class="badge">↑ 산성</span>
-          <span class="badge">↓ 알칼리</span>
-        </div>
-      </details>
+    <div class="abga-table-box">
+      <table class="abga-table-fixed">
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>정상 범위</th>
+            <th>산증 (Acidosis)</th>
+            <th>알칼리증 (Alkalosis)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>pH</td>
+            <td>7.35 ~ 7.45</td>
+            <td>&lt; 7.35</td>
+            <td>&gt; 7.45</td>
+          </tr>
+          <tr>
+            <td>PaCO₂</td>
+            <td>35 ~ 45 mmHg</td>
+            <td>&gt; 45 (상승)</td>
+            <td>&lt; 35 (하락)</td>
+          </tr>
+          <tr>
+            <td>HCO₃⁻</td>
+            <td>22 ~ 26 mEq/L</td>
+            <td>&lt; 22 (하락)</td>
+            <td>&gt; 26 (상승)</td>
+          </tr>
+          <tr>
+            <td>PaO₂</td>
+            <td>80 ~ 100 mmHg</td>
+            <td>&lt; 60 (저산소증)</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
 
-      <details class="edu-item">
-        <summary>HCO₃⁻</summary>
-        <p>HCO₃⁻는 <strong>대사성 요인</strong>을 반영합니다.</p>
-        <p>증가하면 <strong>알칼리 방향</strong>, 감소하면 <strong>산성 방향</strong>으로 작용합니다.</p>
-        <div class="badge-row">
-          <span class="badge">정상 22~26mEq/L</span>
-          <span class="badge">↑ 알칼리</span>
-          <span class="badge">↓ 산성</span>
-        </div>
-      </details>
-   
-<details class="edu-item">
-  <summary>정상수치 정리</summary>
-  <p class="table-description">ABGA 해석 전에 반드시 확인해야 하는 기본 정상 범위입니다.</p>
-
-  <div class="abga-table-box">
-    <table class="abga-table-fixed">
-      <thead>
-        <tr>
-          <th>항목</th>
-          <th>정상 범위</th>
-          <th>산증 (Acidosis)</th>
-          <th>알칼리증 (Alkalosis)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>pH</td>
-          <td>7.35 ~ 7.45</td>
-          <td>&lt; 7.35</td>
-          <td>&gt; 7.45</td>
-        </tr>
-        <tr>
-          <td>PaCO₂</td>
-          <td>35 ~ 45 mmHg</td>
-          <td>&gt; 45 (상승)</td>
-          <td>&lt; 35 (하락)</td>
-        </tr>
-        <tr>
-          <td>HCO₃⁻</td>
-          <td>22 ~ 26 mEq/L</td>
-          <td>&lt; 22 (하락)</td>
-          <td>&gt; 26 (상승)</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</details>
-
-      <details class="edu-item">
-        <summary>해석 순서</summary>
-        <p><strong>pH → PaCO₂ → HCO₃⁻</strong> 순서로 확인합니다.</p>
-        <p>보상성 변화(Compensation) 여부를 확인합니다.</p>
-        
-        <p class="rome-tip">
+  <!-- 산염기 -->
+  <details class="edu-item">
+    <summary>산염기 (Acid-Base)</summary>
+    <p>pH는 혈액의 산성도와 알칼리도를 나타내는 지표입니다.</p>
+    <p><strong>pH &lt; 7.35이면 산증</strong>, <strong>pH &gt; 7.45이면 알칼리증</strong>입니다.</p>
+    <p>ABGA 해석에서는 <strong>pH를 가장 먼저 확인</strong>합니다.</p>
+    <div class="badge-row">
+      <span class="badge">정상 7.35~7.45</span>
+      <span class="badge">↓ 산증</span>
+      <span class="badge">↑ 알칼리증</span>
+    </div>
+    <p class="rome-tip">
   <strong>*Tip! ROME 공식:</strong><br>
   <span class="rome-line">Respiratory Opposite (호흡성은 pH와 반대 방향: pH↓ 이면 PaCO₂↑)</span><br>
   <span class="rome-line">Metabolic Equal (대사성은 pH와 같은 방향: pH↓ 이면 HCO₃⁻↓)</span>
@@ -895,15 +874,48 @@
 <p>- pH↓ + HCO₃⁻↓ → 대사성 산증</p>
 <p>- pH↑ + HCO₃⁻↑ → 대사성 알칼리증</p>
 </p>
-      </details>
 
-      <details class="edu-item">
-        <summary>주의점</summary>
-        <p>정상 pH 범위 내에서도 혼합형 산-염기 장애가 숨어 있을 수 있습니다.</p>
-        <p>보상반응이나 혼합장애 가능성을 고려해 전체 수치를 함께 봐야 합니다.</p>
-      </details>
-    </section>
+  </details>
 
+  <!-- 환기 -->
+  <details class="edu-item">
+    <summary>환기 (Ventilation)</summary>
+    <p>PaCO₂는 <strong>환기 상태</strong>를 반영하는 지표입니다.</p>
+    <p><strong>PaCO₂가 높으면 저환기</strong>, <strong>낮으면 과환기</strong>를 의미합니다.</p>
+    <p>PaCO₂는 호흡성 요인이므로, 증가하면 <strong>산성 방향</strong>, 감소하면 <strong>알칼리 방향</strong>으로 작용합니다.</p>
+    <div class="badge-row">
+      <span class="badge">정상 35~45 mmHg</span>
+      <span class="badge">↑ 저환기</span>
+      <span class="badge">↓ 과환기</span>
+    </div>
+  </details>
+
+  <!-- 산소화 -->
+  <details class="edu-item">
+    <summary>산소화 (Oxygenation)</summary>
+    <p>PaO₂는 혈액 내 <strong>산소화 상태</strong>를 반영합니다.</p>
+    <p><strong>PaO₂가 60 mmHg 미만이면 저산소증</strong>으로 판단합니다.</p>
+    <p>산-염기 해석과 별개로, ABGA에서는 <strong>산소화 상태도 반드시 함께 확인</strong>해야 합니다.</p>
+    <div class="badge-row">
+      <span class="badge">정상 80~100 mmHg</span>
+      <span class="badge">↓ 저산소증</span>
+    </div>
+  </details>
+
+  <!-- 호흡부전 -->
+  <details class="edu-item">
+    <summary>호흡부전 (Respiratory Failure)</summary>
+    <p>ABGA는 호흡부전 여부를 판단할 때도 중요합니다.</p>
+    <p><strong>Type 1</strong>: 저산소형 호흡부전 → <strong>PaO₂ 감소</strong></p>
+    <p><strong>Type 2</strong>: 고탄산형 호흡부전 → <strong>PaCO₂ 증가</strong></p>
+    <p>즉, <strong>산소 문제인지 CO₂ 문제인지 구분</strong>하는 것이 중요합니다.</p>
+    <div class="badge-row">
+      <span class="badge">Type 1: PaO₂ ↓</span>
+      <span class="badge">Type 2: PaCO₂ ↑</span>
+    </div>
+  </details>
+</section>
+    
     <section id="interpret" class="panel">
   <h2 class="section-title">해석 훈련</h2>
   <p class="section-desc">순서대로 생각하는 연습을 통해 ABGA 해석 흐름을 몸에 익힙니다.</p>
