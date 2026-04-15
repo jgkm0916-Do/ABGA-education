@@ -754,6 +754,7 @@
       <button class="tab-btn" onclick="showTab('interpret', this)">해석 훈련</button>
       <button class="tab-btn" onclick="showTab('compensation', this)">보상반응</button>
       <button class="tab-btn" onclick="showTab('cases', this)">임상 케이스</button>
+      <button class="tab-btn" onclick="showTab('nursing', this)">간호 중재</button>
       <button class="tab-btn" onclick="showTab('quiz', this)">퀴즈</button>
       <button class="tab-btn" onclick="showTab('auto-advanced', this)">자동 해석</button>
     </div>
@@ -1063,6 +1064,79 @@
         </details>
       </div>
     </section>
+
+    <section id="nursing" class="panel">
+  <h2 class="section-title">산-염기 이상별 간호 중재</h2>
+  <p class="section-desc">ABGA 해석 후 간호사가 우선적으로 확인하고 수행해야 할 중재입니다.</p>
+
+  <div class="grid-2">
+
+    <!-- 호흡성 산증 -->
+    <div class="card">
+      <h3>호흡성 산증</h3>
+      <div class="badge-row">
+        <span class="badge">CO₂ ↑</span>
+        <span class="badge">환기 저하</span>
+      </div>
+      <ul>
+        <li>호흡수, SpO₂, ABGA 재확인</li>
+        <li>기도 유지 및 분비물 제거</li>
+        <li>산소요법 또는 환기보조 준비</li>
+        <li>의식저하 여부 확인</li>
+        <li>의사에게 즉시 보고</li>
+      </ul>
+    </div>
+
+    <!-- 호흡성 알칼리증 -->
+    <div class="card">
+      <h3>호흡성 알칼리증</h3>
+      <div class="badge-row">
+        <span class="badge">CO₂ ↓</span>
+        <span class="badge">과호흡</span>
+      </div>
+      <ul>
+        <li>호흡수 및 과호흡 여부 확인</li>
+        <li>불안, 통증, 발열 여부 사정</li>
+        <li>심호흡 유도 및 안정 환경 제공</li>
+        <li>산소과다 투여 여부 확인</li>
+        <li>원인(통증/불안) 완화 중재</li>
+      </ul>
+    </div>
+
+    <!-- 대사성 산증 -->
+    <div class="card">
+      <h3>대사성 산증</h3>
+      <div class="badge-row">
+        <span class="badge">HCO₃⁻ ↓</span>
+        <span class="badge">산 축적</span>
+      </div>
+      <ul>
+        <li>탈수, 설사, 쇼크 여부 확인</li>
+        <li>DKA, 신부전 등 원인 평가</li>
+        <li>수액요법 준비 및 투여 확인</li>
+        <li>호흡 보상(Kussmaul) 관찰</li>
+        <li>전해질(K⁺) 변화 확인</li>
+      </ul>
+    </div>
+
+    <!-- 대사성 알칼리증 -->
+    <div class="card">
+      <h3>대사성 알칼리증</h3>
+      <div class="badge-row">
+        <span class="badge">HCO₃⁻ ↑</span>
+        <span class="badge">염기 증가</span>
+      </div>
+      <ul>
+        <li>구토, 위장관 흡인 여부 확인</li>
+        <li>이뇨제 사용 여부 확인</li>
+        <li>저칼륨혈증(K⁺↓) 확인</li>
+        <li>수액 및 전해질 보충 준비</li>
+        <li>호흡 억제 여부 관찰</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
 
     <section id="quiz" class="panel">
       <h2 class="section-title">퀴즈</h2>
