@@ -1294,7 +1294,7 @@ function analyzeAdvancedABG() {
     lines.push(`pH ${ph.toFixed(2)}로 산증입니다.`);
 
     if (co2High && !hco3Low) {
-      primaryDisorder = '호흡성 산증으로 해석됩니다.';
+      primaryDisorder = '<span class="result-acidosis">호흡성 산증</span>으로 해석됩니다.';
 
       const acuteExpected = 24 + ((co2 - 40) / 10) * 1;
       const chronicExpected = 24 + ((co2 - 40) / 10) * 3.5;
@@ -1314,7 +1314,7 @@ function analyzeAdvancedABG() {
     }
 
     else if (hco3Low && !co2High) {
-      primaryDisorder = '대사성 산증으로 해석됩니다.';
+      primaryDisorder = '<span class="result-acidosis">대사성 산증</span>으로 해석됩니다.';
 
       const winterLow = 1.5 * hco3 + 8 - 2;
       const winterHigh = 1.5 * hco3 + 8 + 2;
@@ -1332,7 +1332,7 @@ function analyzeAdvancedABG() {
     }
 
     else if (co2High && hco3Low) {
-      primaryDisorder = '복합성 산증이 의심됩니다.';
+      primaryDisorder = '<span class="result-acidosis">복합성 산증</span>이 의심됩니다.';
       compensationText = '단순 보상으로 설명하기 어렵습니다.';
       extraText = 'PaCO₂ 상승과 HCO₃⁻ 저하가 동시에 산증 방향으로 작용하여 혼합장애 가능성이 큽니다.';
     }
@@ -1348,7 +1348,7 @@ function analyzeAdvancedABG() {
     lines.push(`pH ${ph.toFixed(2)}로 알칼리증입니다.`);
 
     if (co2Low && !hco3High) {
-      primaryDisorder = '호흡성 알칼리증으로 해석됩니다.';
+      primaryDisorder = '<span class="result-alkalosis">호흡성 알칼리증</span>으로 해석됩니다.';
 
       const acuteExpected = 24 - ((40 - co2) / 10) * 2;
       const chronicExpected = 24 - ((40 - co2) / 10) * 5;
@@ -1368,7 +1368,7 @@ function analyzeAdvancedABG() {
     }
 
     else if (hco3High && !co2Low) {
-      primaryDisorder = '대사성 알칼리증으로 해석됩니다.';
+      primaryDisorder = '<span class="result-alkalosis">대사성 알칼리증</span>으로 해석됩니다.';
 
       const expectedLow = 0.7 * (hco3 - 24) + 40 - 5;
       const expectedHigh = 0.7 * (hco3 - 24) + 40 + 5;
@@ -1386,7 +1386,7 @@ function analyzeAdvancedABG() {
     }
 
     else if (co2Low && hco3High) {
-      primaryDisorder = '복합성 알칼리증이 의심됩니다.';
+      primaryDisorder = '<span class="result-alkalosis">복합성 알칼리증</span>이 의심됩니다.';
       compensationText = '단순 보상으로 설명하기 어렵습니다.';
       extraText = 'PaCO₂ 저하와 HCO₃⁻ 상승이 동시에 알칼리 방향으로 작용하여 혼합장애 가능성이 큽니다.';
     }
@@ -1402,15 +1402,15 @@ function analyzeAdvancedABG() {
     lines.push(`pH ${ph.toFixed(2)}로 정상 범위입니다.`);
 
     if (co2High && hco3High) {
-      primaryDisorder = '보상된 호흡성 산증 또는 혼합장애 가능성이 있습니다.';
+      primaryDisorder = '보상된 <span class="result-acidosis">호흡성 산증</span> 또는 혼합장애 가능성이 있습니다.';
     } else if (co2Low && hco3Low) {
-      primaryDisorder = '보상된 호흡성 알칼리증 또는 혼합장애 가능성이 있습니다.';
+      primaryDisorder = '보상된 <span class="result-alkalosis">호흡성 알칼리증</span> 또는 혼합장애 가능성이 있습니다.';
     } else if (co2Low && hco3High) {
-      primaryDisorder = '혼합형 알칼리증 가능성이 있습니다.';
+      primaryDisorder = '<span class="result-alkalosis">혼합형 알칼리증</span> 가능성이 있습니다.';
     } else if (co2High && hco3Low) {
-      primaryDisorder = '혼합형 산증 가능성이 있습니다.';
+      primaryDisorder = '<span class="result-acidosis">혼합형 산증</span> 가능성이 있습니다.';
     } else {
-      primaryDisorder = '뚜렷한 산-염기 장애가 보이지 않습니다.';
+      primaryDisorder = '<span class="result-normal">뚜렷한 산-염기 장애가 보이지 않습니다.</span>';
     }
 
     compensationText = 'pH가 정상이어도 보상된 장애가 숨어 있을 수 있습니다.';
