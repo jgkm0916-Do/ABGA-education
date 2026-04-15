@@ -793,7 +793,7 @@
 
     <section class="hero">
       <h1>ABGA 교육 모듈</h1>
-      <p>기초 이해부터 임상 적용까지 단계적으로 학습하는 대전보훈병원 간호사 대상 ABGA 교육용 웹앱입니다.</p>
+      <p>기초 이해부터 임상 적용까지 단계적으로 학습하는   대전보훈병원 간호사 대상 ABGA 교육용 웹앱입니다.</p>
     </section>
 
     <div class="tab-bar">
@@ -1395,899 +1395,699 @@
   </div>
 
   <script>
-   function showTab(tabId, el) {
-  document.querySelectorAll(".panel").forEach(panel => {
-    panel.classList.remove("active");
-  });
+  function showTab(tabId, el) {
+    document.querySelectorAll('.panel').forEach(function(panel) {
+      panel.classList.remove('active');
+    });
 
-  document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.classList.remove("active");
-  });
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.classList.remove('active');
+    });
 
-  const target = document.getElementById(tabId);
-  if (target) {
-    target.classList.add("active");
+    var target = document.getElementById(tabId);
+    if (target) target.classList.add('active');
+    if (el) el.classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  if (el) {
-    el.classList.add("active");
+  function showStepFeedback(targetId, isCorrect, text) {
+    var box = document.getElementById(targetId);
+    if (!box) return;
+    box.className = 'feedback show ' + (isCorrect ? 'good' : 'bad');
+    box.textContent = text;
   }
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-    
-    function showStepFeedback(targetId, isCorrect, text) {
-      const box = document.getElementById(targetId);
-      box.className = "feedback show " + (isCorrect ? "good" : "bad");
-      box.textContent = text;
+  const interpretCases = {
+    case1: {
+      ph: '7.28',
+      co2: '55 mmHg',
+      hco3: '24 mEq/L',
+      po2: '58 mmHg',
+      guide: '예시 1: 호흡성 산증 + 저산소증 패턴입니다. 단계별로 판단해보세요.',
+      step1: [
+        { text: '산증', correct: true, msg: '맞습니다. pH 7.28은 산증입니다.' },
+        { text: '정상', correct: false, msg: 'pH 7.28은 정상 범위가 아닙니다.' },
+        { text: '알칼리증', correct: false, msg: 'pH 7.28은 알칼리증이 아닙니다.' }
+      ],
+      step2: [
+        { text: '상승', correct: true, msg: '맞습니다. PaCO₂ 55는 상승입니다. 저환기를 시사합니다.' },
+        { text: '정상', correct: false, msg: 'PaCO₂ 55는 정상보다 높습니다.' },
+        { text: '하강', correct: false, msg: 'PaCO₂는 감소가 아니라 상승입니다.' }
+      ],
+      step3: [
+        { text: '상승', correct: false, msg: 'HCO₃⁻ 24는 정상입니다.' },
+        { text: '정상', correct: true, msg: '맞습니다. HCO₃⁻ 24는 정상입니다.' },
+        { text: '하강', correct: false, msg: 'HCO₃⁻는 감소가 아닙니다.' }
+      ],
+      step4: [
+        { text: '정상', correct: false, msg: 'PaO₂ 58은 정상 범위가 아닙니다.' },
+        { text: '경계 저하', correct: false, msg: 'PaO₂ 58은 경계 저하가 아니라 저산소증입니다.' },
+        { text: '저산소증', correct: true, msg: '맞습니다. PaO₂ 58은 60 미만이므로 저산소증입니다.' }
+      ],
+      step5: [
+        { text: '호흡성 산증 + 저산소증', correct: true, msg: '정답입니다. 호흡성 산증이며 저산소증이 동반되어 있습니다.' },
+        { text: '대사성 산증', correct: false, msg: 'HCO₃⁻ 감소가 핵심이 아닙니다.' },
+        { text: '호흡성 알칼리증', correct: false, msg: 'PaCO₂가 감소가 아니라 상승입니다.' },
+        { text: '대사성 알칼리증', correct: false, msg: '알칼리증 소견이 아닙니다.' },
+        { text: '보상된 호흡성 산증', correct: false, msg: '이 예시는 HCO₃⁻ 보상이 뚜렷하지 않습니다.' },
+        { text: '정상 산-염기 + 저산소증', correct: false, msg: 'pH가 정상 범위가 아닙니다.' }
+      ]
+    },
+
+    case2: {
+      ph: '7.30',
+      co2: '40 mmHg',
+      hco3: '18 mEq/L',
+      po2: '82 mmHg',
+      guide: '예시 2: 대사성 산증 패턴입니다. 단계별로 판단해보세요.',
+      step1: [
+        { text: '산증', correct: true, msg: '맞습니다. pH 7.30은 산증입니다.' },
+        { text: '정상', correct: false, msg: 'pH 7.30은 정상 범위가 아닙니다.' },
+        { text: '알칼리증', correct: false, msg: 'pH 7.30은 알칼리증이 아닙니다.' }
+      ],
+      step2: [
+        { text: '상승', correct: false, msg: 'PaCO₂ 40은 정상입니다.' },
+        { text: '정상', correct: true, msg: '맞습니다. PaCO₂ 40은 정상입니다.' },
+        { text: '하강', correct: false, msg: 'PaCO₂는 감소하지 않았습니다.' }
+      ],
+      step3: [
+        { text: '상승', correct: false, msg: 'HCO₃⁻ 18은 증가가 아니라 감소입니다.' },
+        { text: '정상', correct: false, msg: 'HCO₃⁻ 18은 정상보다 낮습니다.' },
+        { text: '하강', correct: true, msg: '맞습니다. HCO₃⁻ 감소는 산성 방향입니다.' }
+      ],
+      step4: [
+        { text: '정상', correct: true, msg: '맞습니다. PaO₂ 82는 정상 범위입니다.' },
+        { text: '경계 저하', correct: false, msg: 'PaO₂ 82는 경계 저하가 아닙니다.' },
+        { text: '저산소증', correct: false, msg: 'PaO₂ 82는 저산소증이 아닙니다.' }
+      ],
+      step5: [
+        { text: '호흡성 산증 + 저산소증', correct: false, msg: 'PaCO₂와 PaO₂는 정상 범위입니다.' },
+        { text: '대사성 산증', correct: true, msg: '정답입니다. 대사성 산증입니다.' },
+        { text: '호흡성 알칼리증', correct: false, msg: '알칼리증이 아닙니다.' },
+        { text: '대사성 알칼리증', correct: false, msg: 'HCO₃⁻는 증가가 아니라 감소입니다.' },
+        { text: '보상된 호흡성 산증', correct: false, msg: '호흡성 산증 패턴이 아닙니다.' },
+        { text: '정상 산-염기 + 저산소증', correct: false, msg: 'pH가 정상 범위가 아닙니다.' }
+      ]
+    },
+
+    case3: {
+      ph: '7.50',
+      co2: '30 mmHg',
+      hco3: '24 mEq/L',
+      po2: '90 mmHg',
+      guide: '예시 3: 호흡성 알칼리증 패턴입니다. 단계별로 판단해보세요.',
+      step1: [
+        { text: '산증', correct: false, msg: 'pH 7.50은 산증이 아닙니다.' },
+        { text: '정상', correct: false, msg: 'pH 7.50은 정상보다 높습니다.' },
+        { text: '알칼리증', correct: true, msg: '맞습니다. pH 7.50은 알칼리증입니다.' }
+      ],
+      step2: [
+        { text: '상승', correct: false, msg: 'PaCO₂ 30은 증가가 아니라 감소입니다.' },
+        { text: '정상', correct: false, msg: 'PaCO₂ 30은 정상보다 낮습니다.' },
+        { text: '하강', correct: true, msg: '맞습니다. PaCO₂ 30은 감소되어 과환기 상태입니다.' }
+      ],
+      step3: [
+        { text: '상승', correct: false, msg: 'HCO₃⁻ 24는 정상입니다.' },
+        { text: '정상', correct: true, msg: '맞습니다. HCO₃⁻ 24는 정상입니다.' },
+        { text: '하강', correct: false, msg: 'HCO₃⁻는 감소가 아닙니다.' }
+      ],
+      step4: [
+        { text: '정상', correct: true, msg: '맞습니다. PaO₂ 90은 정상입니다.' },
+        { text: '경계 저하', correct: false, msg: 'PaO₂ 90은 경계 저하가 아닙니다.' },
+        { text: '저산소증', correct: false, msg: 'PaO₂ 90은 저산소증이 아닙니다.' }
+      ],
+      step5: [
+        { text: '호흡성 산증 + 저산소증', correct: false, msg: '반대 패턴입니다.' },
+        { text: '대사성 산증', correct: false, msg: '산증이 아닙니다.' },
+        { text: '호흡성 알칼리증', correct: true, msg: '정답입니다. 호흡성 알칼리증입니다.' },
+        { text: '대사성 알칼리증', correct: false, msg: '핵심은 HCO₃⁻가 아니라 PaCO₂ 감소입니다.' },
+        { text: '보상된 호흡성 산증', correct: false, msg: '호흡성 산증이 아닙니다.' },
+        { text: '정상 산-염기 + 저산소증', correct: false, msg: 'pH가 정상 범위가 아닙니다.' }
+      ]
+    },
+
+    case4: {
+      ph: '7.48',
+      co2: '40 mmHg',
+      hco3: '30 mEq/L',
+      po2: '88 mmHg',
+      guide: '예시 4: 대사성 알칼리증 패턴입니다. 단계별로 판단해보세요.',
+      step1: [
+        { text: '산증', correct: false, msg: 'pH 7.48은 산증이 아닙니다.' },
+        { text: '정상', correct: false, msg: 'pH 7.48은 정상보다 높습니다.' },
+        { text: '알칼리증', correct: true, msg: '맞습니다. pH 7.48은 알칼리증입니다.' }
+      ],
+      step2: [
+        { text: '상승', correct: false, msg: 'PaCO₂ 40은 정상입니다.' },
+        { text: '정상', correct: true, msg: '맞습니다. PaCO₂ 40은 정상입니다.' },
+        { text: '하강', correct: false, msg: 'PaCO₂는 감소하지 않았습니다.' }
+      ],
+      step3: [
+        { text: '상승', correct: true, msg: '맞습니다. HCO₃⁻ 30은 증가되어 알칼리 방향입니다.' },
+        { text: '정상', correct: false, msg: 'HCO₃⁻ 30은 정상보다 높습니다.' },
+        { text: '하강', correct: false, msg: 'HCO₃⁻는 감소가 아니라 증가입니다.' }
+      ],
+      step4: [
+        { text: '정상', correct: true, msg: '맞습니다. PaO₂ 88은 정상입니다.' },
+        { text: '경계 저하', correct: false, msg: 'PaO₂ 88은 경계 저하가 아닙니다.' },
+        { text: '저산소증', correct: false, msg: 'PaO₂ 88은 저산소증이 아닙니다.' }
+      ],
+      step5: [
+        { text: '호흡성 산증 + 저산소증', correct: false, msg: '해당되지 않습니다.' },
+        { text: '대사성 산증', correct: false, msg: 'HCO₃⁻ 감소가 아닙니다.' },
+        { text: '호흡성 알칼리증', correct: false, msg: 'PaCO₂ 감소가 핵심이 아닙니다.' },
+        { text: '대사성 알칼리증', correct: true, msg: '정답입니다. 대사성 알칼리증입니다.' },
+        { text: '보상된 호흡성 산증', correct: false, msg: '호흡성 산증이 아닙니다.' },
+        { text: '정상 산-염기 + 저산소증', correct: false, msg: 'pH가 정상 범위가 아닙니다.' }
+      ]
+    },
+
+    case5: {
+      ph: '7.32',
+      co2: '55 mmHg',
+      hco3: '30 mEq/L',
+      po2: '62 mmHg',
+      guide: '예시 5: 보상된 호흡성 산증 패턴입니다. 단계별로 판단해보세요.',
+      step1: [
+        { text: '산증', correct: true, msg: '맞습니다. pH 7.32는 산증입니다.' },
+        { text: '정상', correct: false, msg: 'pH 7.32는 정상보다 낮습니다.' },
+        { text: '알칼리증', correct: false, msg: '알칼리증이 아닙니다.' }
+      ],
+      step2: [
+        { text: '상승', correct: true, msg: '맞습니다. PaCO₂ 55는 상승입니다.' },
+        { text: '정상', correct: false, msg: 'PaCO₂ 55는 정상보다 높습니다.' },
+        { text: '하강', correct: false, msg: 'PaCO₂는 감소가 아닙니다.' }
+      ],
+      step3: [
+        { text: '상승', correct: true, msg: '맞습니다. HCO₃⁻ 30은 증가되어 보상을 시사합니다.' },
+        { text: '정상', correct: false, msg: 'HCO₃⁻ 30은 정상보다 높습니다.' },
+        { text: '하강', correct: false, msg: 'HCO₃⁻는 감소가 아닙니다.' }
+      ],
+      step4: [
+        { text: '정상', correct: false, msg: 'PaO₂ 62는 정상보다 낮습니다.' },
+        { text: '경계 저하', correct: true, msg: '맞습니다. PaO₂ 62는 경계 저하로 볼 수 있습니다.' },
+        { text: '저산소증', correct: false, msg: 'PaO₂ 62는 60 미만은 아닙니다.' }
+      ],
+      step5: [
+        { text: '호흡성 산증 + 저산소증', correct: false, msg: '저산소증으로 분류할 정도는 아닙니다.' },
+        { text: '대사성 산증', correct: false, msg: '핵심은 PaCO₂ 상승입니다.' },
+        { text: '호흡성 알칼리증', correct: false, msg: '알칼리증이 아닙니다.' },
+        { text: '대사성 알칼리증', correct: false, msg: 'HCO₃⁻ 단독 이상이 아닙니다.' },
+        { text: '보상된 호흡성 산증', correct: true, msg: '정답입니다. 보상된 호흡성 산증입니다.' },
+        { text: '정상 산-염기 + 저산소증', correct: false, msg: 'pH가 정상 범위가 아닙니다.' }
+      ]
+    },
+
+    case6: {
+      ph: '7.40',
+      co2: '40 mmHg',
+      hco3: '24 mEq/L',
+      po2: '55 mmHg',
+      guide: '예시 6: 산-염기 상태는 정상이지만 저산소증이 있는 패턴입니다. 산소화도 꼭 확인하세요.',
+      step1: [
+        { text: '산증', correct: false, msg: 'pH 7.40은 정상입니다.' },
+        { text: '정상', correct: true, msg: '맞습니다. pH 7.40은 정상입니다.' },
+        { text: '알칼리증', correct: false, msg: '알칼리증이 아닙니다.' }
+      ],
+      step2: [
+        { text: '상승', correct: false, msg: 'PaCO₂ 40은 정상입니다.' },
+        { text: '정상', correct: true, msg: '맞습니다. PaCO₂ 40은 정상입니다.' },
+        { text: '하강', correct: false, msg: 'PaCO₂는 감소하지 않았습니다.' }
+      ],
+      step3: [
+        { text: '상승', correct: false, msg: 'HCO₃⁻ 24는 정상입니다.' },
+        { text: '정상', correct: true, msg: '맞습니다. HCO₃⁻ 24는 정상입니다.' },
+        { text: '하강', correct: false, msg: 'HCO₃⁻는 감소하지 않았습니다.' }
+      ],
+      step4: [
+        { text: '정상', correct: false, msg: 'PaO₂ 55는 정상 범위가 아닙니다.' },
+        { text: '경계 저하', correct: false, msg: 'PaO₂ 55는 경계 저하가 아니라 저산소증입니다.' },
+        { text: '저산소증', correct: true, msg: '맞습니다. PaO₂ 55는 60 미만이므로 저산소증입니다.' }
+      ],
+      step5: [
+        { text: '호흡성 산증 + 저산소증', correct: false, msg: '산-염기 상태는 정상입니다.' },
+        { text: '대사성 산증', correct: false, msg: '산증 소견이 없습니다.' },
+        { text: '호흡성 알칼리증', correct: false, msg: '알칼리증 소견이 없습니다.' },
+        { text: '대사성 알칼리증', correct: false, msg: '알칼리증 소견이 없습니다.' },
+        { text: '보상된 호흡성 산증', correct: false, msg: '해당되지 않습니다.' },
+        { text: '정상 산-염기 + 저산소증', correct: true, msg: '정답입니다. 산-염기는 정상이지만 저산소증이 있습니다.' }
+      ]
     }
-const interpretCases = {
-  case1: {
-    ph: "7.28",
-    co2: "55 mmHg",
-    hco3: "24 mEq/L",
-    po2: "58 mmHg",
-    guide: "예시 1: 호흡성 산증 + 저산소증 패턴입니다. 단계별로 판단해보세요.",
-    step1: [
-      { text: "산증", correct: true, msg: "맞습니다. pH 7.28은 7.35보다 낮으므로 산증입니다." },
-      { text: "정상", correct: false, msg: "pH 7.28은 정상 범위가 아니라 산증입니다." },
-      { text: "알칼리증", correct: false, msg: "pH 7.28은 7.35보다 낮으므로 산증입니다." }
-    ],
-    step2: [
-      { text: "상승", correct: true, msg: "맞습니다. PaCO₂ 55는 정상보다 높아 상승입니다. 저환기를 시사합니다." },
-      { text: "정상", correct: false, msg: "PaCO₂ 55는 정상(35~45)보다 높습니다." },
-      { text: "하강", correct: false, msg: "PaCO₂ 55는 감소가 아니라 상승입니다." }
-    ],
-    step3: [
-      { text: "상승", correct: false, msg: "HCO₃⁻ 24는 정상 범위에 가깝습니다." },
-      { text: "정상", correct: true, msg: "맞습니다. HCO₃⁻ 24는 정상 범위입니다." },
-      { text: "하강", correct: false, msg: "HCO₃⁻ 24는 감소가 아닙니다." }
-    ],
-    step4: [
-      { text: "정상", correct: false, msg: "PaO₂ 58은 정상(80~100)이 아닙니다." },
-      { text: "경계 저하", correct: false, msg: "PaO₂ 58은 경계가 아니라 저산소증입니다." },
-      { text: "저산소증", correct: true, msg: "맞습니다. PaO₂ 58은 60 미만이므로 저산소증입니다." }
-    ],
-    step5: [
-      { text: "호흡성 산증 + 저산소증", correct: true, msg: "정답입니다. pH는 산증, PaCO₂는 상승, HCO₃⁻는 정상으로 호흡성 산증이며 PaO₂는 저산소증입니다." },
-      { text: "대사성 산증", correct: false, msg: "HCO₃⁻가 감소하지 않았으므로 대사성 산증이 아닙니다." },
-      { text: "호흡성 알칼리증", correct: false, msg: "pH가 낮고 PaCO₂는 상승했으므로 알칼리증이 아닙니다." },
-      { text: "대사성 알칼리증", correct: false, msg: "알칼리증 소견이 아닙니다." },
-      { text: "보상된 호흡성 산증", correct: false, msg: "이 예시는 HCO₃⁻ 보상이 뚜렷하지 않습니다." },
-      { text: "정상 산-염기 + 저산소증", correct: false, msg: "pH가 정상 범위가 아니므로 정상 산-염기가 아닙니다." }
-    ]
-  },
+  };
 
-  case2: {
-    ph: "7.30",
-    co2: "40 mmHg",
-    hco3: "18 mEq/L",
-    po2: "82 mmHg",
-    guide: "예시 2: 대사성 산증 패턴입니다. 단계별로 판단해보세요.",
-    step1: [
-      { text: "산증", correct: true, msg: "맞습니다. pH 7.30은 산증입니다." },
-      { text: "정상", correct: false, msg: "pH 7.30은 정상 범위가 아닙니다." },
-      { text: "알칼리증", correct: false, msg: "pH 7.30은 알칼리증이 아니라 산증입니다." }
-    ],
-    step2: [
-      { text: "상승", correct: false, msg: "PaCO₂ 40은 정상 범위입니다." },
-      { text: "정상", correct: true, msg: "맞습니다. PaCO₂ 40은 정상 범위입니다." },
-      { text: "하강", correct: false, msg: "PaCO₂는 감소하지 않았습니다." }
-    ],
-    step3: [
-      { text: "상승", correct: false, msg: "HCO₃⁻ 18은 증가가 아니라 감소입니다." },
-      { text: "정상", correct: false, msg: "HCO₃⁻ 18은 정상보다 낮습니다." },
-      { text: "하강", correct: true, msg: "맞습니다. HCO₃⁻ 18은 감소되어 산성 방향입니다." }
-    ],
-    step4: [
-      { text: "정상", correct: true, msg: "맞습니다. PaO₂ 82는 정상 범위입니다." },
-      { text: "경계 저하", correct: false, msg: "PaO₂ 82는 저하된 상태로 보지 않습니다." },
-      { text: "저산소증", correct: false, msg: "PaO₂ 82는 저산소증이 아닙니다." }
-    ],
-    step5: [
-      { text: "호흡성 산증 + 저산소증", correct: false, msg: "PaCO₂가 정상이고 PaO₂도 정상입니다." },
-      { text: "대사성 산증", correct: true, msg: "정답입니다. pH는 산증, HCO₃⁻는 감소되어 대사성 산증입니다." },
-      { text: "호흡성 알칼리증", correct: false, msg: "알칼리증이 아닙니다." },
-      { text: "대사성 알칼리증", correct: false, msg: "HCO₃⁻는 증가가 아니라 감소입니다." },
-      { text: "보상된 호흡성 산증", correct: false, msg: "호흡성 산증 패턴이 아닙니다." },
-      { text: "정상 산-염기 + 저산소증", correct: false, msg: "pH가 정상 범위가 아닙니다." }
-    ]
-  },
+  function renderInterpretOptions(containerId, feedbackId, options) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
 
-  case3: {
-    ph: "7.50",
-    co2: "30 mmHg",
-    hco3: "24 mEq/L",
-    po2: "90 mmHg",
-    guide: "예시 3: 호흡성 알칼리증 패턴입니다. 단계별로 판단해보세요.",
-    step1: [
-      { text: "산증", correct: false, msg: "pH 7.50은 산증이 아니라 알칼리증입니다." },
-      { text: "정상", correct: false, msg: "pH 7.50은 정상보다 높습니다." },
-      { text: "알칼리증", correct: true, msg: "맞습니다. pH 7.50은 알칼리증입니다." }
-    ],
-    step2: [
-      { text: "상승", correct: false, msg: "PaCO₂ 30은 증가가 아니라 감소입니다." },
-      { text: "정상", correct: false, msg: "PaCO₂ 30은 정상보다 낮습니다." },
-      { text: "하강", correct: true, msg: "맞습니다. PaCO₂ 30은 감소되어 과환기 상태를 시사합니다." }
-    ],
-    step3: [
-      { text: "상승", correct: false, msg: "HCO₃⁻ 24는 정상 범위입니다." },
-      { text: "정상", correct: true, msg: "맞습니다. HCO₃⁻ 24는 정상 범위입니다." },
-      { text: "하강", correct: false, msg: "HCO₃⁻는 감소가 아닙니다." }
-    ],
-    step4: [
-      { text: "정상", correct: true, msg: "맞습니다. PaO₂ 90은 정상 범위입니다." },
-      { text: "경계 저하", correct: false, msg: "PaO₂ 90은 경계 저하가 아닙니다." },
-      { text: "저산소증", correct: false, msg: "PaO₂ 90은 저산소증이 아닙니다." }
-    ],
-    step5: [
-      { text: "호흡성 산증 + 저산소증", correct: false, msg: "pH가 높고 PaCO₂는 낮으므로 반대입니다." },
-      { text: "대사성 산증", correct: false, msg: "산증이 아닙니다." },
-      { text: "호흡성 알칼리증", correct: true, msg: "정답입니다. pH는 알칼리증, PaCO₂는 감소되어 호흡성 알칼리증입니다." },
-      { text: "대사성 알칼리증", correct: false, msg: "핵심 이상은 HCO₃⁻가 아니라 PaCO₂ 감소입니다." },
-      { text: "보상된 호흡성 산증", correct: false, msg: "호흡성 산증이 아닙니다." },
-      { text: "정상 산-염기 + 저산소증", correct: false, msg: "pH가 정상 범위가 아닙니다." }
-    ]
-  },
-
-  case4: {
-    ph: "7.48",
-    co2: "40 mmHg",
-    hco3: "30 mEq/L",
-    po2: "88 mmHg",
-    guide: "예시 4: 대사성 알칼리증 패턴입니다. 단계별로 판단해보세요.",
-    step1: [
-      { text: "산증", correct: false, msg: "pH 7.48은 산증이 아니라 알칼리증입니다." },
-      { text: "정상", correct: false, msg: "pH 7.48은 정상보다 높습니다." },
-      { text: "알칼리증", correct: true, msg: "맞습니다. pH 7.48은 알칼리증입니다." }
-    ],
-    step2: [
-      { text: "상승", correct: false, msg: "PaCO₂ 40은 정상 범위입니다." },
-      { text: "정상", correct: true, msg: "맞습니다. PaCO₂ 40은 정상 범위입니다." },
-      { text: "하강", correct: false, msg: "PaCO₂는 감소하지 않았습니다." }
-    ],
-    step3: [
-      { text: "상승", correct: true, msg: "맞습니다. HCO₃⁻ 30은 증가되어 알칼리 방향입니다." },
-      { text: "정상", correct: false, msg: "HCO₃⁻ 30은 정상보다 높습니다." },
-      { text: "하강", correct: false, msg: "HCO₃⁻는 감소가 아니라 증가입니다." }
-    ],
-    step4: [
-      { text: "정상", correct: true, msg: "맞습니다. PaO₂ 88은 정상 범위입니다." },
-      { text: "경계 저하", correct: false, msg: "PaO₂ 88은 경계 저하가 아닙니다." },
-      { text: "저산소증", correct: false, msg: "PaO₂ 88은 저산소증이 아닙니다." }
-    ],
-    step5: [
-      { text: "호흡성 산증 + 저산소증", correct: false, msg: "해당되지 않습니다." },
-      { text: "대사성 산증", correct: false, msg: "HCO₃⁻가 감소가 아니라 증가입니다." },
-      { text: "호흡성 알칼리증", correct: false, msg: "핵심 이상은 PaCO₂가 아니라 HCO₃⁻ 증가입니다." },
-      { text: "대사성 알칼리증", correct: true, msg: "정답입니다. pH는 알칼리증, HCO₃⁻는 증가되어 대사성 알칼리증입니다." },
-      { text: "보상된 호흡성 산증", correct: false, msg: "호흡성 산증이 아닙니다." },
-      { text: "정상 산-염기 + 저산소증", correct: false, msg: "pH가 정상 범위가 아닙니다." }
-    ]
-  },
-
-  case5: {
-    ph: "7.32",
-    co2: "55 mmHg",
-    hco3: "30 mEq/L",
-    po2: "62 mmHg",
-    guide: "예시 5: 보상된 호흡성 산증 패턴입니다. 단계별로 판단해보세요.",
-    step1: [
-      { text: "산증", correct: true, msg: "맞습니다. pH 7.32는 산증입니다." },
-      { text: "정상", correct: false, msg: "pH 7.32는 정상보다 낮습니다." },
-      { text: "알칼리증", correct: false, msg: "pH 7.32는 알칼리증이 아닙니다." }
-    ],
-    step2: [
-      { text: "상승", correct: true, msg: "맞습니다. PaCO₂ 55는 상승되어 있습니다." },
-      { text: "정상", correct: false, msg: "PaCO₂ 55는 정상보다 높습니다." },
-      { text: "하강", correct: false, msg: "PaCO₂는 감소가 아닙니다." }
-    ],
-    step3: [
-      { text: "상승", correct: true, msg: "맞습니다. HCO₃⁻ 30은 증가되어 보상 반응을 시사합니다." },
-      { text: "정상", correct: false, msg: "HCO₃⁻ 30은 정상보다 높습니다." },
-      { text: "하강", correct: false, msg: "HCO₃⁻는 감소가 아니라 증가입니다." }
-    ],
-    step4: [
-      { text: "정상", correct: false, msg: "PaO₂ 62는 정상보다 낮습니다." },
-      { text: "경계 저하", correct: true, msg: "맞습니다. PaO₂ 62는 저산소증 직전의 경계 저하 상태로 볼 수 있습니다." },
-      { text: "저산소증", correct: false, msg: "PaO₂ 62는 60 미만은 아니므로 저산소증으로 분류하지 않습니다." }
-    ],
-    step5: [
-      { text: "호흡성 산증 + 저산소증", correct: false, msg: "PaO₂는 60 미만이 아니라 경계 저하 수준입니다." },
-      { text: "대사성 산증", correct: false, msg: "핵심은 PaCO₂ 상승입니다." },
-      { text: "호흡성 알칼리증", correct: false, msg: "알칼리증이 아닙니다." },
-      { text: "대사성 알칼리증", correct: false, msg: "핵심 이상은 HCO₃⁻ 단독이 아닙니다." },
-      { text: "보상된 호흡성 산증", correct: true, msg: "정답입니다. PaCO₂ 상승으로 인한 호흡성 산증이며, HCO₃⁻ 상승이 보상을 시사합니다." },
-      { text: "정상 산-염기 + 저산소증", correct: false, msg: "pH가 정상 범위가 아닙니다." }
-    ]
-  },
-
-  case6: {
-  ph: "7.40",
-  co2: "40 mmHg",
-  hco3: "24 mEq/L",
-  po2: "55 mmHg",
-  guide: "예시 6: 산-염기 상태는 정상이지만 저산소증이 있는 패턴입니다. 산소화도 꼭 확인하세요.",
-  step1: [
-    { text: "산증", correct: false, msg: "pH 7.40은 정상 범위입니다." },
-    { text: "정상", correct: true, msg: "맞습니다. pH 7.40은 정상 범위입니다." },
-    { text: "알칼리증", correct: false, msg: "pH 7.40은 알칼리증이 아닙니다." }
-  ],
-  step2: [
-    { text: "상승", correct: false, msg: "PaCO₂ 40은 정상 범위입니다." },
-    { text: "정상", correct: true, msg: "맞습니다. PaCO₂ 40은 정상입니다." },
-    { text: "하강", correct: false, msg: "PaCO₂는 감소하지 않았습니다." }
-  ],
-  step3: [
-    { text: "상승", correct: false, msg: "HCO₃⁻ 24는 정상 범위입니다." },
-    { text: "정상", correct: true, msg: "맞습니다. HCO₃⁻ 24는 정상입니다." },
-    { text: "하강", correct: false, msg: "HCO₃⁻는 감소하지 않았습니다." }
-  ],
-  step4: [
-    { text: "정상", correct: false, msg: "PaO₂ 55는 정상 범위가 아닙니다." },
-    { text: "경계 저하", correct: false, msg: "PaO₂ 55는 경계 저하가 아니라 저산소증입니다." },
-    { text: "저산소증", correct: true, msg: "맞습니다. PaO₂ 55는 60 미만이므로 저산소증입니다." }
-  ],
-  step5: [
-    { text: "호흡성 산증 + 저산소증", correct: false, msg: "산-염기 상태는 정상이므로 해당되지 않습니다." },
-    { text: "대사성 산증", correct: false, msg: "산증 소견이 없습니다." },
-    { text: "호흡성 알칼리증", correct: false, msg: "알칼리증 소견이 없습니다." },
-    { text: "대사성 알칼리증", correct: false, msg: "알칼리증 소견이 없습니다." },
-    { text: "보상된 호흡성 산증", correct: false, msg: "해당되지 않습니다." },
-    { text: "정상 산-염기 + 저산소증", correct: true, msg: "정답입니다. 산-염기 수치는 정상이지만 PaO₂ 55로 저산소증이 있습니다." }
-  ]
-},
-};
-    
-function renderInterpretOptions(containerId, feedbackId, options) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.innerHTML = "";
-
-  options.forEach(option => {
-    const btn = document.createElement("button");
-    btn.className = "option-btn";
-    btn.textContent = option.text;
-    btn.onclick = () => showStepFeedback(feedbackId, option.correct, option.msg);
-    container.appendChild(btn);
-  });
-}
-
-function resetInterpretFeedback() {
-  ["step1", "step2", "step3", "step4", "step5"].forEach(id => {
-    const box = document.getElementById(id);
-    if (box) {
-      box.className = "feedback";
-      box.textContent = "";
-    }
-  });
-}
-
-function loadInterpretCase(caseKey) {
-  const data = interpretCases[caseKey];
-  if (!data) return;
-
-  document.getElementById("iPh").textContent = data.ph;
-  document.getElementById("iCo2").textContent = data.co2;
-  document.getElementById("iHco3").textContent = data.hco3;
-  document.getElementById("iPo2").textContent = data.po2;
-  document.getElementById("interpretGuide").textContent = data.guide;
-
-  renderInterpretOptions("step1Options", "step1", data.step1);
-  renderInterpretOptions("step2Options", "step2", data.step2);
-  renderInterpretOptions("step3Options", "step3", data.step3);
-  renderInterpretOptions("step4Options", "step4", data.step4);
-  renderInterpretOptions("step5Options", "step5", data.step5);
-
-  resetInterpretFeedback();
-}
-    
-    const questionBank = [
-      { type: "단순 해석", q: "pH 7.28 / PaCO₂ 55 / HCO₃⁻ 24 의 해석은?", choices: ["호흡성 산증", "호흡성 알칼리증", "대사성 산증", "대사성 알칼리증"], answer: 0, exp: "pH는 산증이고, PaCO₂가 증가하여 같은 방향이므로 호흡성 산증입니다." },
-      { type: "단순 해석", q: "pH 7.50 / PaCO₂ 30 / HCO₃⁻ 24 의 해석은?", choices: ["호흡성 산증", "호흡성 알칼리증", "대사성 산증", "정상"], answer: 1, exp: "pH는 알칼리증이며, PaCO₂가 감소하여 알칼리 방향이므로 호흡성 알칼리증입니다." },
-      { type: "단순 해석", q: "pH 7.30 / PaCO₂ 40 / HCO₃⁻ 18 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "대사성 알칼리증", "정상"], answer: 1, exp: "pH는 산증이며, HCO₃⁻가 감소하여 같은 방향이므로 대사성 산증입니다." },
-      { type: "단순 해석", q: "pH 7.48 / PaCO₂ 40 / HCO₃⁻ 30 의 해석은?", choices: ["정상", "호흡성 알칼리증", "대사성 알칼리증", "호흡성 산증"], answer: 2, exp: "pH는 알칼리증이고 HCO₃⁻가 증가하여 알칼리 방향이므로 대사성 알칼리증입니다." },
-      { type: "보상반응", q: "pH 7.32 / PaCO₂ 55 / HCO₃⁻ 30 의 해석은?", choices: ["보상 없는 호흡성 산증", "보상된 호흡성 산증", "대사성 산증", "정상"], answer: 1, exp: "PaCO₂가 증가해 호흡성 산증이며, HCO₃⁻가 반대로 증가해 보상반응이 있습니다." },
-      { type: "보상반응", q: "pH 7.30 / PaCO₂ 30 / HCO₃⁻ 16 의 해석은?", choices: ["보상된 대사성 산증", "호흡성 알칼리증", "정상", "보상된 대사성 알칼리증"], answer: 0, exp: "HCO₃⁻가 감소하여 대사성 산증이고, PaCO₂가 반대로 감소해 보상반응이 있습니다." },
-      { type: "개념", q: "ABGA 기본 해석 순서로 가장 적절한 것은?", choices: ["PaCO₂ → HCO₃⁻ → pH", "pH → PaCO₂ → HCO₃⁻", "HCO₃⁻ → pH → PaCO₂", "순서는 중요하지 않다"], answer: 1, exp: "ABGA는 pH로 방향을 먼저 보고, 이어서 PaCO₂와 HCO₃⁻를 확인합니다." },
-      { type: "개념", q: "PaCO₂는 어떤 요인을 반영하는가?", choices: ["호흡성", "대사성", "신경학적", "심혈관성"], answer: 0, exp: "PaCO₂는 호흡성 요인을 반영합니다." },
-      { type: "개념", q: "HCO₃⁻는 어떤 요인을 반영하는가?", choices: ["호흡성", "대사성", "혈액응고", "체온조절"], answer: 1, exp: "HCO₃⁻는 대사성 요인을 반영합니다." },
-      { type: "개념", q: "pH가 정상 범위여도 ABGA 이상이 있을 수 있는 이유는?", choices: ["검사가 틀렸기 때문", "보상반응이나 혼합장애 가능성", "항상 정상이다", "PaCO₂만 중요하기 때문"], answer: 1, exp: "보상반응이나 혼합장애가 있으면 pH가 정상처럼 보여도 이상이 있을 수 있습니다." },
-      { type: "임상 케이스", q: "COPD 환자, pH 7.33 / PaCO₂ 60 / HCO₃⁻ 32. 가장 적절한 해석은?", choices: ["보상된 호흡성 산증", "정상", "대사성 알칼리증", "보상된 대사성 산증"], answer: 0, exp: "PaCO₂ 증가로 호흡성 산증이며, HCO₃⁻가 반대로 증가해 보상반응이 있습니다." },
-      { type: "임상 케이스", q: "과호흡 환자, pH 7.49 / PaCO₂ 29 / HCO₃⁻ 23. 가장 적절한 해석은?", choices: ["대사성 알칼리증", "호흡성 알칼리증", "호흡성 산증", "정상"], answer: 1, exp: "과호흡으로 CO₂가 감소하면 호흡성 알칼리증이 됩니다." },
-      { type: "임상 케이스", q: "반복 구토 환자, pH 7.48 / PaCO₂ 41 / HCO₃⁻ 30. 가장 적절한 해석은?", choices: ["대사성 알칼리증", "호흡성 알칼리증", "대사성 산증", "정상"], answer: 0, exp: "구토는 위산 손실과 연결되며 HCO₃⁻ 증가로 대사성 알칼리증을 보입니다." },
-      { type: "임상 케이스", q: "설사 환자, pH 7.30 / PaCO₂ 38 / HCO₃⁻ 18. 가장 적절한 해석은?", choices: ["대사성 산증", "호흡성 산증", "정상", "호흡성 알칼리증"], answer: 0, exp: "설사로 중탄산 손실이 발생하면 대사성 산증을 보일 수 있습니다." },
-      { type: "임상 케이스", q: "불안 발작 후 손저림을 호소하는 환자, RR 32회/분, pH 7.47 / PaCO₂ 31 / HCO₃⁻ 23. 해석은?", choices: ["호흡성 알칼리증", "대사성 산증", "정상", "호흡성 산증"], answer: 0, exp: "과호흡에 의해 CO₂가 감소한 호흡성 알칼리증입니다." },
-      { type: "단순 해석", q: "pH 7.22 / PaCO₂ 48 / HCO₃⁻ 20 에서 가장 우선 확인해야 하는 방향은?", choices: ["산증", "알칼리증", "정상", "보상"], answer: 0, exp: "ABGA 해석은 언제나 pH 방향부터 확인합니다. pH 7.22는 산증입니다." },
-      { type: "개념", q: "보상반응에 대한 설명으로 맞는 것은?", choices: ["문제와 같은 방향으로 움직인다", "문제 아닌 쪽이 반대로 움직인다", "항상 pH를 완전히 정상화한다", "대사성 문제에는 HCO₃⁻가 보상한다"], answer: 1, exp: "보상반응은 문제 아닌 쪽이 반대로 움직이는 현상으로 이해하는 것이 가장 쉽습니다." },
-      { type: "단순 해석", q: "pH 7.52 / PaCO₂ 44 / HCO₃⁻ 33 의 해석은?", choices: ["대사성 알칼리증", "호흡성 알칼리증", "정상", "호흡성 산증"], answer: 0, exp: "pH는 알칼리증이며 HCO₃⁻가 증가하여 대사성 알칼리증입니다." },
-      { type: "단순 해석", q: "pH 7.18 / PaCO₂ 62 / HCO₃⁻ 22 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "정상", "대사성 알칼리증"], answer: 0, exp: "pH는 산증이고 PaCO₂가 증가하여 호흡성 산증입니다." },
-      { type: "보상반응", q: "대사성 알칼리증에서 보상은 주로 어떤 방향으로 나타나는가?", choices: ["PaCO₂ 증가", "PaCO₂ 감소", "HCO₃⁻ 감소", "pH 감소"], answer: 0, exp: "대사성 알칼리증에서는 PaCO₂가 증가하는 방향으로 보상이 나타날 수 있습니다." },
-      { type: "개념", q: "ABGA에서 pH가 의미하는 것은?", choices: ["산-염기 상태의 방향", "산소 운반능", "혈압", "체온"], answer: 0, exp: "pH는 현재 혈액의 산-염기 상태의 방향을 보여줍니다." },
-      { type: "단순 해석", q: "pH 7.41 / PaCO₂ 55 / HCO₃⁻ 34 의 해석으로 가장 적절한 것은?", choices: ["정상", "보상된 호흡성 산증 가능성", "대사성 산증", "호흡성 알칼리증"], answer: 1, exp: "pH는 정상 범위지만 PaCO₂와 HCO₃⁻가 모두 올라가 있어 보상된 호흡성 산증 가능성을 생각해야 합니다." },
-      { type: "임상 케이스", q: "패혈증 의심 환자, 저혈압과 젖산 상승, pH 7.25 / PaCO₂ 32 / HCO₃⁻ 15. 해석은?", choices: ["보상된 대사성 산증", "호흡성 산증", "대사성 알칼리증", "정상"], answer: 0, exp: "HCO₃⁻ 감소로 대사성 산증이며, PaCO₂ 감소는 보상반응입니다." },
-      { type: "보상반응", q: "호흡성 산증에서 보상반응으로 기대되는 것은?", choices: ["HCO₃⁻ 증가", "HCO₃⁻ 감소", "PaCO₂ 감소", "pH 증가"], answer: 0, exp: "호흡성 산증에서는 HCO₃⁻가 증가하는 방향으로 보상이 나타날 수 있습니다." },
-      { type: "보상반응", q: "대사성 산증에서 보상반응으로 기대되는 것은?", choices: ["PaCO₂ 감소", "PaCO₂ 증가", "HCO₃⁻ 증가", "pH 증가"], answer: 0, exp: "대사성 산증에서는 PaCO₂가 감소하는 방향으로 보상반응이 나타납니다." },
-      { type: "개념", q: "다음 중 대사성 요인에 해당하는 것은?", choices: ["HCO₃⁻", "PaCO₂", "RR", "SpO₂"], answer: 0, exp: "HCO₃⁻는 대사성 요인입니다." },
-      { type: "개념", q: "다음 중 호흡성 요인에 해당하는 것은?", choices: ["PaCO₂", "HCO₃⁻", "젖산", "혈압"], answer: 0, exp: "PaCO₂는 호흡성 요인입니다." },
-      { type: "임상 케이스", q: "기관지천식 악화 환자, pH 7.26 / PaCO₂ 58 / HCO₃⁻ 25. 해석은?", choices: ["호흡성 산증", "대사성 산증", "호흡성 알칼리증", "정상"], answer: 0, exp: "환기 저하로 CO₂가 축적되어 호흡성 산증이 나타납니다." },
-      { type: "임상 케이스", q: "장기간 구토 환자, pH 7.50 / PaCO₂ 47 / HCO₃⁻ 34. 해석은?", choices: ["보상된 대사성 알칼리증", "호흡성 알칼리증", "정상", "대사성 산증"], answer: 0, exp: "HCO₃⁻ 증가로 대사성 알칼리증이며, PaCO₂ 증가가 보상방향입니다." },
-      { type: "단순 해석", q: "pH 7.34 / PaCO₂ 50 / HCO₃⁻ 26 의 해석은?", choices: ["호흡성 산증", "정상", "대사성 산증", "호흡성 알칼리증"], answer: 0, exp: "pH는 산증 쪽이고 PaCO₂가 증가하여 호흡성 산증입니다." },
-      { type: "단순 해석", q: "pH 7.46 / PaCO₂ 32 / HCO₃⁻ 22 의 해석은?", choices: ["호흡성 알칼리증", "대사성 알칼리증", "정상", "호흡성 산증"], answer: 0, exp: "pH는 알칼리증이며 PaCO₂가 감소하여 호흡성 알칼리증입니다." },
-      { type: "단순 해석", q: "pH 7.31 / PaCO₂ 39 / HCO₃⁻ 17 의 해석은?", choices: ["대사성 산증", "호흡성 산증", "정상", "대사성 알칼리증"], answer: 0, exp: "HCO₃⁻ 감소가 핵심이므로 대사성 산증입니다." },
-      { type: "개념", q: "다음 중 ABGA 해석 시 가장 먼저 보는 수치는?", choices: ["pH", "PaCO₂", "HCO₃⁻", "PaO₂"], answer: 0, exp: "가장 먼저 pH로 방향을 확인합니다." },
-      { type: "임상 케이스", q: "불안으로 과호흡하는 환자에서 가장 먼저 예상되는 변화는?", choices: ["PaCO₂ 감소", "PaCO₂ 증가", "HCO₃⁻ 증가", "pH 감소"], answer: 0, exp: "과호흡은 CO₂를 과도하게 배출시켜 PaCO₂를 감소시킵니다." },
-      { type: "개념", q: "pH 7.35는 어떤 의미로 볼 수 있는가?", choices: ["정상 범위의 하한", "항상 산증", "항상 알칼리증", "의미 없음"], answer: 0, exp: "7.35는 정상 범위에 포함되지만 하한선입니다." },
-      { type: "보상반응", q: "보상반응이 있다고 해서 항상 맞는 설명은?", choices: ["pH가 완전히 정상화된다", "문제 아닌 쪽이 반대 방향으로 움직인다", "혼합장애가 없다", "이상 소견이 사라진다"], answer: 1, exp: "보상반응이 있어도 pH가 완전히 정상화되지 않을 수 있습니다." },
-      { type: "단순 해석", q: "pH 7.51 / PaCO₂ 47 / HCO₃⁻ 35 의 해석은?", choices: ["대사성 알칼리증", "호흡성 알칼리증", "정상", "호흡성 산증"], answer: 0, exp: "알칼리증이며 HCO₃⁻ 증가가 핵심이므로 대사성 알칼리증입니다." },
-      { type: "임상 케이스", q: "탈수와 지속적 설사를 보이는 환자의 대표적 ABGA 변화는?", choices: ["대사성 산증", "호흡성 산증", "대사성 알칼리증", "정상"], answer: 0, exp: "설사로 HCO₃⁻ 손실이 발생하면 대사성 산증을 보일 수 있습니다." },
-      { type: "임상 케이스", q: "COPD 환자에서 만성적으로 기대할 수 있는 보상반응은?", choices: ["HCO₃⁻ 증가", "HCO₃⁻ 감소", "PaCO₂ 감소", "pH 상승만"], answer: 0, exp: "만성 CO₂ 저류 상태에서는 HCO₃⁻가 증가하는 보상이 나타날 수 있습니다." },
-      { type: "개념", q: "PaCO₂ 증가가 의미하는 방향은?", choices: ["산성 방향", "알칼리 방향", "중성", "대사성 방향"], answer: 0, exp: "CO₂가 증가하면 산성 방향으로 작용합니다." },
-      { type: "개념", q: "HCO₃⁻ 감소가 의미하는 방향은?", choices: ["산성 방향", "알칼리 방향", "호흡성 방향", "무의미"], answer: 0, exp: "HCO₃⁻가 감소하면 산성 방향으로 작용합니다." },
-      { type: "단순 해석", q: "pH 7.24 / PaCO₂ 30 / HCO₃⁻ 14 의 해석은?", choices: ["보상된 대사성 산증", "호흡성 산증", "정상", "대사성 알칼리증"], answer: 0, exp: "HCO₃⁻ 감소로 대사성 산증이고 PaCO₂ 감소는 보상반응입니다." },
-      { type: "단순 해석", q: "pH 7.47 / PaCO₂ 50 / HCO₃⁻ 34 의 해석은?", choices: ["보상된 대사성 알칼리증", "호흡성 알칼리증", "정상", "대사성 산증"], answer: 0, exp: "HCO₃⁻ 증가가 핵심이며 PaCO₂ 증가가 보상방향입니다." },
-      { type: "임상 케이스", q: "진정제 과다복용 후 저환기 환자에서 가장 기대되는 변화는?", choices: ["PaCO₂ 증가", "PaCO₂ 감소", "HCO₃⁻ 감소", "pH 증가"], answer: 0, exp: "저환기는 CO₂ 배출 감소로 PaCO₂ 증가를 초래합니다." },
-      { type: "개념", q: "혼합장애를 의심해야 하는 상황은?", choices: ["수치들이 단순한 한 가지 패턴으로 설명되지 않을 때", "pH가 항상 정상일 때만", "PaCO₂만 변할 때", "HCO₃⁻만 변할 때"], answer: 0, exp: "수치가 단순한 한 가지 패턴으로 설명되지 않으면 혼합장애 가능성을 생각해야 합니다." },
-      { type: "임상 케이스", q: "패닉 상태의 젊은 환자, 손저림, 어지러움, RR 증가. 우선 의심되는 것은?", choices: ["호흡성 알칼리증", "호흡성 산증", "대사성 산증", "정상"], answer: 0, exp: "과호흡은 호흡성 알칼리증과 연결됩니다." },
-      { type: "임상 케이스", q: "쇼크와 저관류가 있는 환자에서 젖산 상승과 함께 흔한 산-염기 변화는?", choices: ["대사성 산증", "대사성 알칼리증", "호흡성 알칼리증", "정상"], answer: 0, exp: "젖산 축적은 대사성 산증을 유발할 수 있습니다." },
-      { type: "개념", q: "다음 중 pH를 완전히 정상으로 되돌리지 못할 수 있는 것은?", choices: ["보상반응", "정상 호흡", "정상 대사", "수분섭취"], answer: 0, exp: "보상반응이 있어도 pH가 완전히 정상으로 돌아오지 않을 수 있습니다." },
-      { type: "단순 해석", q: "pH 7.29 / PaCO₂ 57 / HCO₃⁻ 26 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "정상", "호흡성 알칼리증"], answer: 0, exp: "pH는 산증, PaCO₂ 증가는 같은 방향으로 호흡성 산증입니다." },
-      { type: "단순 해석", q: "pH 7.45 / PaCO₂ 28 / HCO₃⁻ 19 의 상황을 볼 때 고려할 것은?", choices: ["보상된 이상 가능성", "항상 정상", "해석 불필요", "대사성 알칼리증 확정"], answer: 0, exp: "pH가 정상 상한에 있어도 CO₂와 HCO₃⁻ 이상이 있으면 보상된 상태를 생각해야 합니다." }
-    // ===== 추가 문제 (산소화 / 환기 / 간호중재 강화) =====
-
-questionBank.push(
-  {
-    type: "산소화",
-    q: "PaO₂ 55 mmHg의 의미로 가장 적절한 것은?",
-    choices: ["정상", "경계 저하", "저산소증", "과환기"],
-    answer: 2,
-    exp: "PaO₂ 60 mmHg 미만은 저산소증으로 판단합니다."
-  },
-  {
-    type: "산소화",
-    q: "ABGA에서 산소화 상태를 평가하는 가장 중요한 수치는?",
-    choices: ["pH", "PaCO₂", "HCO₃⁻", "PaO₂"],
-    answer: 3,
-    exp: "PaO₂는 산소화 상태를 직접적으로 반영합니다."
-  },
-  {
-    type: "환기",
-    q: "PaCO₂가 60 mmHg로 상승했을 때 의미는?",
-    choices: ["과환기", "저환기", "정상", "산소 부족"],
-    answer: 1,
-    exp: "PaCO₂ 상승은 CO₂가 축적된 상태로 저환기를 의미합니다."
-  },
-  {
-    type: "임상 판단",
-    q: "pH 정상, PaCO₂ 정상, HCO₃⁻ 정상, PaO₂ 55. 가장 중요한 문제는?",
-    choices: ["산증", "알칼리증", "저산소증", "보상반응"],
-    answer: 2,
-    exp: "산염기보다 PaO₂ 저하가 우선 문제입니다."
-  },
-  {
-    type: "임상 판단",
-    q: "COPD 환자에서 pH 7.33 / PaCO₂ 60 / HCO₃⁻ 32 / PaO₂ 56. 가장 우선 중재는?",
-    choices: ["수액 투여", "진정제 투여", "환기 개선", "식이 조절"],
-    answer: 2,
-    exp: "CO₂ 저류 + 저산소증 → 환기 개선이 최우선입니다."
-  },
-  {
-    type: "간호중재",
-    q: "대사성 산증 환자에서 가장 우선 확인해야 할 것은?",
-    choices: ["피부색", "체온", "순환 상태", "시력"],
-    answer: 2,
-    exp: "대사성 산증은 쇼크/저관류와 연결되므로 순환 상태가 중요합니다."
-  },
-  {
-    type: "간호중재",
-    q: "호흡성 산증 환자에서 가장 우선 중재는?",
-    choices: ["수분 공급", "환기 개선", "진정", "식이 조절"],
-    answer: 1,
-    exp: "호흡성 산증은 CO₂ 축적 → 환기 개선이 핵심입니다."
-  },
-  {
-    type: "간호중재",
-    q: "저산소증(PaO₂ < 60) 환자에서 가장 먼저 고려할 중재는?",
-    choices: ["이뇨제", "항생제", "산소 투여", "운동"],
-    answer: 2,
-    exp: "저산소증은 산소 공급이 우선입니다."
-  },
-  {
-    type: "임상 케이스",
-    q: "폐렴 환자, pH 정상 / PaO₂ 58. 가장 중요한 문제는?",
-    choices: ["대사성 산증", "호흡성 산증", "저산소증", "보상반응"],
-    answer: 2,
-    exp: "산염기보다 산소화 문제가 우선입니다."
-  },
-  {
-    type: "개념",
-    q: "다음 중 보상반응 판단에 직접적으로 사용되지 않는 것은?",
-    choices: ["pH", "PaCO₂", "HCO₃⁻", "PaO₂"],
-    answer: 3,
-    exp: "PaO₂는 산소화 평가용이며 보상 판단 지표가 아닙니다."
+    options.forEach(function(option) {
+      var btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = option.text;
+      btn.onclick = function() {
+        showStepFeedback(feedbackId, option.correct, option.msg);
+      };
+      container.appendChild(btn);
+    });
   }
-);
-    ];
 
-    let quizData = [];
-    let currentQuiz = 0;
-    let score = 0;
-    let answered = false;
-
-    function shuffleArray(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+  function resetInterpretFeedback() {
+    ['step1', 'step2', 'step3', 'step4', 'step5'].forEach(function(id) {
+      var box = document.getElementById(id);
+      if (box) {
+        box.className = 'feedback';
+        box.textContent = '';
       }
-      return arr;
-    }
-
-    function initializeQuiz() {
-      quizData = shuffleArray(questionBank).slice(0, 10);
-      currentQuiz = 0;
-      score = 0;
-      answered = false;
-      document.getElementById("resultBox").style.display = "none";
-      loadQuizQuestion();
-    }
-
-    function loadQuizQuestion() {
-      answered = false;
-      const q = quizData[currentQuiz];
-
-      document.getElementById("quizType").textContent = q.type;
-      document.getElementById("quizQuestion").innerHTML = q.q;
-      document.getElementById("quizProgress").textContent = `문항 ${currentQuiz + 1} / ${quizData.length}`;
-      document.getElementById("quizScore").textContent = `점수 ${score}점`;
-
-      const choicesBox = document.getElementById("quizChoices");
-      choicesBox.innerHTML = "";
-
-      q.choices.forEach((choice, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "choice-btn";
-        btn.textContent = choice;
-        btn.onclick = () => selectQuizAnswer(idx);
-        choicesBox.appendChild(btn);
-      });
-
-      const feedback = document.getElementById("quizFeedback");
-      feedback.className = "quiz-feedback";
-      feedback.style.display = "none";
-      feedback.innerHTML = "";
-
-      document.getElementById("nextBtn").style.display = "none";
-    }
-
-    function selectQuizAnswer(selectedIdx) {
-      if (answered) return;
-      answered = true;
-
-      const q = quizData[currentQuiz];
-      const buttons = document.querySelectorAll("#quizChoices .choice-btn");
-      const feedback = document.getElementById("quizFeedback");
-
-      buttons.forEach((btn, idx) => {
-        btn.disabled = true;
-        if (idx === q.answer) {
-          btn.classList.add("correct");
-        }
-      });
-
-      if (selectedIdx === q.answer) {
-        score += 10;
-        feedback.className = "quiz-feedback good";
-        feedback.innerHTML = `<strong>정답입니다.</strong><div class="explain">${q.exp}</div>`;
-      } else {
-        buttons[selectedIdx].classList.add("incorrect");
-        feedback.className = "quiz-feedback bad";
-        feedback.innerHTML = `<strong>오답입니다.</strong><div class="explain">${q.exp}</div>`;
-      }
-
-      feedback.style.display = "block";
-      document.getElementById("quizScore").textContent = `점수 ${score}점`;
-
-      if (currentQuiz < quizData.length - 1) {
-        document.getElementById("nextBtn").style.display = "inline-block";
-      } else {
-        showQuizResult();
-      }
-    }
-
-    function nextQuizQuestion() {
-      currentQuiz += 1;
-      loadQuizQuestion();
-    }
-
-    function showQuizResult() {
-      const resultBox = document.getElementById("resultBox");
-      const correctCount = score / 10;
-      resultBox.style.display = "block";
-      document.getElementById("resultText").textContent =
-  getQuizResultMessage(correctCount, quizData.length);
-    }
-
-    function restartQuiz() {
-      initializeQuiz();
-      loadInterpretCase("case1");
-    
-    }
-
-    function getQuizResultMessage(score, total) {
-  const percent = Math.round((score / total) * 100);
-
-  if (percent >= 90) {
-    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)
-
-아주 훌륭합니다! ABGA의 산-염기 해석, 산소화 평가, 임상 적용까지 잘 이해하고 있습니다. 실제 상황에서도 우선순위를 잘 판단할 수 있는 수준입니다.`;
-  } else if (percent >= 70) {
-    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)
-
-좋습니다. 기본적인 해석 흐름은 잘 이해하고 있습니다. 다만 저산소증 판단, 보상반응, 우선 간호중재 부분은 한 번 더 복습하면 더 탄탄해집니다.`;
-  } else if (percent >= 50) {
-    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)
-
-기초 개념은 어느 정도 이해했지만, 해석 순서와 임상 적용 연습이 더 필요합니다. pH → PaCO₂ → HCO₃⁻ → PaO₂ 순서로 다시 복습해보세요.`;
-  } else {
-    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)
-
-재학습이 필요합니다. 먼저 정상수치, 해석 순서, 호흡성/대사성 구분, PaO₂ 의미를 다시 정리한 뒤 퀴즈를 다시 풀어보는 것을 권장합니다.`;
+    });
   }
-}
-    function resetAdvancedABG() {
-  document.getElementById('phInput').value = '';
-  document.getElementById('co2Input').value = '';
-  document.getElementById('hco3Input').value = '';
-  document.getElementById('advancedResultBox').innerHTML = '';
 
-  const nursingBox = document.getElementById('nursingInterventionBox');
-  if (nursingBox) {
-    nursingBox.innerHTML = '';
-    nursingBox.style.display = 'none';
+  function loadInterpretCase(caseKey) {
+    var data = interpretCases[caseKey];
+    if (!data) return;
+
+    document.getElementById('iPh').textContent = data.ph;
+    document.getElementById('iCo2').textContent = data.co2;
+    document.getElementById('iHco3').textContent = data.hco3;
+    document.getElementById('iPo2').textContent = data.po2;
+    document.getElementById('interpretGuide').textContent = data.guide;
+
+    renderInterpretOptions('step1Options', 'step1', data.step1);
+    renderInterpretOptions('step2Options', 'step2', data.step2);
+    renderInterpretOptions('step3Options', 'step3', data.step3);
+    renderInterpretOptions('step4Options', 'step4', data.step4);
+    renderInterpretOptions('step5Options', 'step5', data.step5);
+
+    resetInterpretFeedback();
   }
-}
-function renderNursingIntervention(type) {
-  const nursingBox = document.getElementById('nursingInterventionBox');
 
-  const nursingMap = {
-    respiratory_acidosis: {
-      title: '추천 간호중재',
-      body: `
+ const questionBank = [
+
+  // ===== 단순 해석 =====
+  { type: "단순 해석", q: "pH 7.28 / PaCO₂ 55 / HCO₃⁻ 24 의 해석은?", choices: ["호흡성 산증", "호흡성 알칼리증", "대사성 산증", "대사성 알칼리증"], answer: 0, exp: "pH↓ + PaCO₂↑ → 호흡성 산증" },
+  { type: "단순 해석", q: "pH 7.50 / PaCO₂ 30 / HCO₃⁻ 24 의 해석은?", choices: ["호흡성 산증", "호흡성 알칼리증", "대사성 산증", "정상"], answer: 1, exp: "pH↑ + PaCO₂↓ → 호흡성 알칼리증" },
+  { type: "단순 해석", q: "pH 7.30 / PaCO₂ 40 / HCO₃⁻ 18 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "대사성 알칼리증", "정상"], answer: 1, exp: "HCO₃⁻↓ → 대사성 산증" },
+  { type: "단순 해석", q: "pH 7.48 / PaCO₂ 40 / HCO₃⁻ 30 의 해석은?", choices: ["정상", "호흡성 알칼리증", "대사성 알칼리증", "호흡성 산증"], answer: 2, exp: "HCO₃⁻↑ → 대사성 알칼리증" },
+  { type: "단순 해석", q: "pH 7.52 / PaCO₂ 44 / HCO₃⁻ 33 의 해석은?", choices: ["대사성 알칼리증", "호흡성 알칼리증", "정상", "호흡성 산증"], answer: 0, exp: "pH↑ + HCO₃⁻↑ → 대사성 알칼리증" },
+  { type: "단순 해석", q: "pH 7.18 / PaCO₂ 62 / HCO₃⁻ 22 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "정상", "대사성 알칼리증"], answer: 0, exp: "pH↓ + PaCO₂↑ → 호흡성 산증" },
+  { type: "단순 해석", q: "pH 7.34 / PaCO₂ 50 / HCO₃⁻ 26 의 해석은?", choices: ["호흡성 산증", "정상", "대사성 산증", "호흡성 알칼리증"], answer: 0, exp: "pH↓ + PaCO₂↑ → 호흡성 산증" },
+  { type: "단순 해석", q: "pH 7.46 / PaCO₂ 32 / HCO₃⁻ 22 의 해석은?", choices: ["호흡성 알칼리증", "대사성 알칼리증", "정상", "호흡성 산증"], answer: 0, exp: "pH↑ + PaCO₂↓ → 호흡성 알칼리증" },
+  { type: "단순 해석", q: "pH 7.31 / PaCO₂ 39 / HCO₃⁻ 17 의 해석은?", choices: ["대사성 산증", "호흡성 산증", "정상", "대사성 알칼리증"], answer: 0, exp: "HCO₃⁻↓ → 대사성 산증" },
+  { type: "단순 해석", q: "pH 7.29 / PaCO₂ 57 / HCO₃⁻ 26 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "정상", "호흡성 알칼리증"], answer: 0, exp: "PaCO₂↑ → 호흡성 산증" },
+
+  // ===== 보상 =====
+  { type: "보상반응", q: "pH 7.32 / PaCO₂ 55 / HCO₃⁻ 30 의 해석은?", choices: ["보상 없는 호흡성 산증", "보상된 호흡성 산증", "대사성 산증", "정상"], answer: 1, exp: "HCO₃⁻↑ → 보상 있음" },
+  { type: "보상반응", q: "pH 7.30 / PaCO₂ 30 / HCO₃⁻ 16 의 해석은?", choices: ["보상된 대사성 산증", "호흡성 알칼리증", "정상", "보상된 대사성 알칼리증"], answer: 0, exp: "PaCO₂↓ → 보상" },
+  { type: "보상반응", q: "대사성 알칼리증 보상은?", choices: ["PaCO₂ 증가", "PaCO₂ 감소", "HCO₃⁻ 감소", "pH 감소"], answer: 0, exp: "호흡 억제 → CO₂ 증가" },
+  { type: "보상반응", q: "호흡성 산증 보상은?", choices: ["HCO₃⁻ 증가", "HCO₃⁻ 감소", "PaCO₂ 감소", "pH 증가"], answer: 0, exp: "신장 보상 → HCO₃⁻↑" },
+  { type: "보상반응", q: "대사성 산증 보상은?", choices: ["PaCO₂ 감소", "PaCO₂ 증가", "HCO₃⁻ 증가", "pH 증가"], answer: 0, exp: "과환기 → CO₂↓" },
+
+  // ===== 개념 =====
+  { type: "개념", q: "ABGA 해석 순서?", choices: ["pH → PaCO₂ → HCO₃⁻", "PaCO₂ → pH → HCO₃⁻", "HCO₃⁻ → pH", "순서 없음"], answer: 0, exp: "항상 pH 먼저" },
+  { type: "개념", q: "PaCO₂ 의미?", choices: ["호흡성", "대사성", "혈압", "체온"], answer: 0, exp: "호흡성 지표" },
+  { type: "개념", q: "HCO₃⁻ 의미?", choices: ["호흡성", "대사성", "산소", "체온"], answer: 1, exp: "대사성 지표" },
+  { type: "개념", q: "pH 의미?", choices: ["산-염기 상태", "산소화", "혈압", "체온"], answer: 0, exp: "산-염기 방향" },
+  { type: "개념", q: "혼합장애 의심 상황?", choices: ["설명 안될 때", "항상 정상", "PaCO₂만 변화", "HCO₃⁻만 변화"], answer: 0, exp: "패턴 불일치" },
+
+  // ===== 산소화 =====
+  { type: "산소화", q: "PaO₂ 55 의미?", choices: ["정상", "경계", "저산소증", "과환기"], answer: 2, exp: "<60 → 저산소증" },
+  { type: "산소화", q: "산소화 평가 지표?", choices: ["pH", "PaCO₂", "HCO₃⁻", "PaO₂"], answer: 3, exp: "PaO₂ 핵심" },
+  { type: "산소화", q: "PaO₂ 80 의미?", choices: ["정상", "저산소증", "산증", "알칼리증"], answer: 0, exp: "정상범위" },
+
+  // ===== 환기 =====
+  { type: "환기", q: "PaCO₂ 60 의미?", choices: ["저환기", "과환기", "정상", "저산소"], answer: 0, exp: "CO₂ 축적" },
+  { type: "환기", q: "PaCO₂ 30 의미?", choices: ["저환기", "과환기", "정상", "산소 부족"], answer: 1, exp: "과환기" },
+
+  // ===== 임상 =====
+  { type: "임상", q: "COPD pH 7.33 / CO₂ 60 / HCO₃⁻ 32", choices: ["보상된 호흡성 산증", "정상", "대사성 알칼리증", "대사성 산증"], answer: 0, exp: "CO₂↑ + HCO₃⁻↑" },
+  { type: "임상", q: "과호흡 환자?", choices: ["호흡성 알칼리증", "산증", "정상", "대사성"], answer: 0, exp: "CO₂ 감소" },
+  { type: "임상", q: "설사 환자?", choices: ["대사성 산증", "호흡성", "정상", "알칼리증"], answer: 0, exp: "HCO₃⁻ 감소" },
+  { type: "임상", q: "구토 환자?", choices: ["대사성 알칼리증", "산증", "정상", "호흡성"], answer: 0, exp: "HCO₃⁻ 증가" },
+
+  // ===== 간호 =====
+  { type: "간호", q: "호흡성 산증 중재?", choices: ["환기 개선", "수액", "식이", "운동"], answer: 0, exp: "환기 우선" },
+  { type: "간호", q: "저산소증 중재?", choices: ["산소 투여", "수액", "식이", "운동"], answer: 0, exp: "산소 우선" },
+  { type: "간호", q: "대사성 산증 중재?", choices: ["순환 평가", "운동", "수면", "식이"], answer: 0, exp: "쇼크 확인" }
+
+];
+
+  let quizData = [];
+  let currentQuiz = 0;
+  let score = 0;
+  let answered = false;
+
+  function shuffleArray(arr) {
+    const copy = arr.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = copy[i];
+      copy[i] = copy[j];
+      copy[j] = temp;
+    }
+    return copy;
+  }
+
+  function initializeQuiz() {
+    quizData = shuffleArray(questionBank).slice(0, 10);
+    currentQuiz = 0;
+    score = 0;
+    answered = false;
+
+    document.getElementById('quizScore').textContent = '점수 0점';
+    document.getElementById('resultBox').style.display = 'none';
+    document.getElementById('nextBtn').style.display = 'none';
+
+    loadQuizQuestion();
+  }
+
+  function loadQuizQuestion() {
+    const q = quizData[currentQuiz];
+    answered = false;
+
+    document.getElementById('quizProgress').textContent = `문항 ${currentQuiz + 1} / ${quizData.length}`;
+    document.getElementById('quizType').textContent = q.type;
+    document.getElementById('quizQuestion').textContent = q.q;
+
+    const choicesBox = document.getElementById('quizChoices');
+    choicesBox.innerHTML = '';
+
+    q.choices.forEach(function(choice, idx) {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = choice;
+      btn.onclick = function() {
+        selectQuizAnswer(idx);
+      };
+      choicesBox.appendChild(btn);
+    });
+
+    const feedback = document.getElementById('quizFeedback');
+    feedback.className = 'quiz-feedback';
+    feedback.style.display = 'none';
+    feedback.innerHTML = '';
+
+    document.getElementById('nextBtn').style.display = 'none';
+  }
+
+  function selectQuizAnswer(selectedIdx) {
+    if (answered) return;
+    answered = true;
+
+    const q = quizData[currentQuiz];
+    const buttons = document.querySelectorAll('#quizChoices .choice-btn');
+    const feedback = document.getElementById('quizFeedback');
+
+    buttons.forEach(function(btn, idx) {
+      btn.disabled = true;
+      if (idx === q.answer) {
+        btn.classList.add('correct');
+      }
+    });
+
+    if (selectedIdx === q.answer) {
+      score += 10;
+      feedback.className = 'quiz-feedback good';
+      feedback.innerHTML = `<strong>정답입니다.</strong><div class="explain">${q.exp}</div>`;
+    } else {
+      buttons[selectedIdx].classList.add('incorrect');
+      feedback.className = 'quiz-feedback bad';
+      feedback.innerHTML = `<strong>오답입니다.</strong><div class="explain">${q.exp}</div>`;
+    }
+
+    feedback.style.display = 'block';
+    document.getElementById('quizScore').textContent = `점수 ${score}점`;
+
+    if (currentQuiz < quizData.length - 1) {
+      document.getElementById('nextBtn').style.display = 'inline-block';
+    } else {
+      showQuizResult();
+    }
+  }
+
+  function nextQuizQuestion() {
+    currentQuiz += 1;
+    loadQuizQuestion();
+  }
+
+  function getQuizResultMessage(correctCount, total) {
+    const percent = Math.round((correctCount / total) * 100);
+
+    if (percent >= 90) {
+      return `총 ${total}문항 중 ${correctCount}문항 정답 (${percent}점)
+
+아주 훌륭합니다! ABGA의 산-염기 해석, 산소화 평가, 임상 적용까지 잘 이해하고 있습니다.`;
+    } else if (percent >= 70) {
+      return `총 ${total}문항 중 ${correctCount}문항 정답 (${percent}점)
+
+좋습니다. 기본 해석 흐름은 잘 이해하고 있습니다. 저산소증 판단과 간호중재를 한 번 더 복습해보세요.`;
+    } else if (percent >= 50) {
+      return `총 ${total}문항 중 ${correctCount}문항 정답 (${percent}점)
+
+기초 개념은 이해했지만, 해석 순서와 임상 적용 연습이 더 필요합니다.`;
+    } else {
+      return `총 ${total}문항 중 ${correctCount}문항 정답 (${percent}점)
+
+재학습이 필요합니다. 정상수치, 해석 순서, 호흡성/대사성 구분, PaO₂ 의미를 다시 복습해보세요.`;
+    }
+  }
+
+  function showQuizResult() {
+    const resultBox = document.getElementById('resultBox');
+    const correctCount = score / 10;
+    resultBox.style.display = 'block';
+    document.getElementById('resultText').textContent = getQuizResultMessage(correctCount, quizData.length);
+  }
+
+  function restartQuiz() {
+    initializeQuiz();
+    loadInterpretCase('case1');
+  }
+
+  function resetAdvancedABG() {
+    document.getElementById('phInput').value = '';
+    document.getElementById('co2Input').value = '';
+    document.getElementById('hco3Input').value = '';
+    document.getElementById('advancedResultBox').innerHTML = '';
+
+    const nursingBox = document.getElementById('nursingInterventionBox');
+    if (nursingBox) {
+      nursingBox.innerHTML = '';
+      nursingBox.style.display = 'none';
+    }
+  }
+
+  function renderNursingIntervention(type) {
+    const nursingBox = document.getElementById('nursingInterventionBox');
+    if (!nursingBox) return;
+
+    const nursingMap = {
+      respiratory_acidosis: `
         <div class="result-section">
           <div class="result-card main">
-            <div class="result-card-title">호흡성 산증</div>
+            <div class="result-card-title">추천 간호중재</div>
             <div class="result-card-body">
               1. 호흡수, SpO₂, 호흡양상, 의식상태를 우선 사정합니다.<br>
               2. 기도 유지 여부와 분비물 저류를 확인합니다.<br>
-              3. 처방된 산소요법, 흡인, 환기보조 필요성을 확인합니다.<br>
-              4. ABGA 재검 시점과 변화 추이를 확인합니다.<br>
-              5. 저환기, COPD 악화, 진정제 영향 등 원인을 함께 평가합니다.
+              3. 환기 개선을 우선 고려합니다.<br>
+              4. 저산소증 시 산소 투여를 고려하되 COPD 환자는 과도한 산소에 주의합니다.<br>
+              5. ABGA 재검과 원인 평가를 함께 진행합니다.
             </div>
           </div>
         </div>
-      `
-    },
-
-    respiratory_alkalosis: {
-      title: '추천 간호중재',
-      body: `
+      `,
+      respiratory_alkalosis: `
         <div class="result-section">
           <div class="result-card comp">
-            <div class="result-card-title">호흡성 알칼리증</div>
+            <div class="result-card-title">추천 간호중재</div>
             <div class="result-card-body">
-              1. 과호흡 여부와 호흡수를 확인합니다.<br>
+              1. 과호흡 여부를 확인합니다.<br>
               2. 불안, 통증, 발열, 저산소증 등 원인을 사정합니다.<br>
-              3. 안정된 환경을 제공하고 호흡을 천천히 하도록 돕습니다.<br>
-              4. 산소 과다 투여 여부를 확인합니다.<br>
-              5. 증상이 지속되면 ABGA 재평가 및 의료진 보고를 시행합니다.
+              3. 안정된 환경을 제공하고 호흡 조절을 돕습니다.<br>
+              4. 필요 시 ABGA 재평가와 의료진 보고를 시행합니다.
             </div>
           </div>
         </div>
-      `
-    },
-
-    metabolic_acidosis: {
-      title: '추천 간호중재',
-      body: `
+      `,
+      metabolic_acidosis: `
         <div class="result-section">
           <div class="result-card extra">
-            <div class="result-card-title">대사성 산증</div>
+            <div class="result-card-title">추천 간호중재</div>
             <div class="result-card-body">
               1. 탈수, 설사, 쇼크, DKA, 신부전 등 원인을 확인합니다.<br>
-              2. 활력징후와 말초관류 상태를 사정합니다.<br>
-              3. 수액요법 및 처방된 치료를 준비하고 투여 상태를 확인합니다.<br>
-              4. Kussmaul 호흡 등 보상성 호흡양상을 관찰합니다.<br>
-              5. 전해질, 특히 K⁺ 변화와 혈당을 함께 확인합니다.
+              2. 활력징후와 말초관류를 사정합니다.<br>
+              3. 수액요법과 처방된 치료를 준비합니다.<br>
+              4. Kussmaul 호흡 여부와 전해질 변화를 확인합니다.
             </div>
           </div>
         </div>
-      `
-    },
-
-    metabolic_alkalosis: {
-      title: '추천 간호중재',
-      body: `
+      `,
+      metabolic_alkalosis: `
         <div class="result-section">
           <div class="result-card summary">
-            <div class="result-card-title">대사성 알칼리증</div>
+            <div class="result-card-title">추천 간호중재</div>
             <div class="result-card-body">
               1. 반복 구토, 위장관 흡인, 이뇨제 사용 여부를 확인합니다.<br>
-              2. 탈수와 전해질 이상, 특히 저칼륨혈증 가능성을 사정합니다.<br>
+              2. 탈수와 저칼륨혈증 가능성을 사정합니다.<br>
               3. 수액 및 전해질 보충 처방을 확인합니다.<br>
-              4. 호흡 억제나 저환기 여부를 관찰합니다.<br>
-              5. 증상 변화와 ABGA 추이를 함께 관찰합니다.
+              4. 호흡 억제 여부를 관찰합니다.
             </div>
           </div>
         </div>
-      `
-    },
-
-    mixed_acidosis: {
-      title: '추천 간호중재',
-      body: `
+      `,
+      mixed_acidosis: `
         <div class="result-section">
           <div class="result-card main">
-            <div class="result-card-title">혼합형 산증 의심</div>
+            <div class="result-card-title">추천 간호중재</div>
             <div class="result-card-body">
-              1. 상태 악화 가능성이 높으므로 활력징후와 의식상태를 우선 확인합니다.<br>
+              1. 활력징후와 의식상태를 우선 확인합니다.<br>
               2. 호흡기 원인과 대사성 원인을 동시에 평가합니다.<br>
-              3. ABGA 재검 및 원인 교정을 위한 협업이 필요합니다.<br>
-              4. 즉시 의료진에게 보고하고 추가 처치를 준비합니다.
+              3. ABGA 재검 및 의료진 보고를 즉시 시행합니다.
             </div>
           </div>
         </div>
-      `
-    },
-
-    mixed_alkalosis: {
-      title: '추천 간호중재',
-      body: `
+      `,
+      mixed_alkalosis: `
         <div class="result-section">
           <div class="result-card comp">
-            <div class="result-card-title">혼합형 알칼리증 의심</div>
+            <div class="result-card-title">추천 간호중재</div>
             <div class="result-card-body">
               1. 과호흡과 대사성 원인을 함께 평가합니다.<br>
               2. 통증, 불안, 구토, 위장관 흡인, 이뇨제 사용 여부를 확인합니다.<br>
-              3. ABGA와 전해질 결과를 함께 재평가합니다.<br>
-              4. 원인 교정과 증상 완화를 위해 의료진과 협업합니다.
+              3. 전해질과 ABGA를 함께 재평가합니다.
             </div>
           </div>
         </div>
-      `
-    },
-
-    unclear: {
-      title: '추천 간호중재',
-      body: `
+      `,
+      unclear: `
         <div class="result-section">
           <div class="result-card summary">
             <div class="result-card-title">추가 평가 필요</div>
             <div class="result-card-body">
-              1. 단일 패턴으로 설명되지 않으므로 전체 임상상과 함께 판단합니다.<br>
+              1. 단일 패턴으로 설명되지 않습니다.<br>
               2. 활력징후, 의식상태, 호흡양상, 원인 질환을 함께 확인합니다.<br>
-              3. 필요 시 ABGA 재검과 추가 검사 결과를 확인합니다.
+              3. 필요 시 ABGA 재검과 추가 검사를 진행합니다.
             </div>
           </div>
         </div>
       `
-    }
-  };
+    };
 
-  const selected = nursingMap[type] || nursingMap.unclear;
-  nursingBox.innerHTML = selected.body;
-  nursingBox.style.display = 'block';
-}
-    
-function analyzeAdvancedABG() {
-  const ph = parseFloat(document.getElementById('phInput').value);
-  const co2 = parseFloat(document.getElementById('co2Input').value);
-  const hco3 = parseFloat(document.getElementById('hco3Input').value);
-  const resultBox = document.getElementById('advancedResultBox');
-
-  if (isNaN(ph) || isNaN(co2) || isNaN(hco3)) {
-    resultBox.innerHTML = '모든 값을 입력해주세요.';
-    return;
+    nursingBox.innerHTML = nursingMap[type] || nursingMap.unclear;
+    nursingBox.style.display = 'block';
   }
 
-  let lines = [];
-  let primaryDisorder = '';
-  let compensationText = '';
-  let extraText = '';
-  let summaryText = '';
-  let nursingType = 'unclear';
+  function analyzeAdvancedABG() {
+    const ph = parseFloat(document.getElementById('phInput').value);
+    const co2 = parseFloat(document.getElementById('co2Input').value);
+    const hco3 = parseFloat(document.getElementById('hco3Input').value);
+    const resultBox = document.getElementById('advancedResultBox');
 
-  const phLow = ph < 7.35;
-  const phHigh = ph > 7.45;
-  const phNormal = ph >= 7.35 && ph <= 7.45;
+    if (isNaN(ph) || isNaN(co2) || isNaN(hco3)) {
+      resultBox.innerHTML = '모든 값을 입력해주세요.';
+      return;
+    }
 
-  const co2High = co2 > 45;
-  const co2Low = co2 < 35;
-  const hco3High = hco3 > 26;
-  const hco3Low = hco3 < 22;
+    let primaryDisorder = '';
+    let compensationText = '';
+    let extraText = '';
+    let summaryText = '';
+    let nursingType = 'unclear';
 
-  if (phLow) {
-    lines.push(`pH ${ph.toFixed(2)}로 산증입니다.`);
+    const phLow = ph < 7.35;
+    const phHigh = ph > 7.45;
+    const co2High = co2 > 45;
+    const co2Low = co2 < 35;
+    const hco3High = hco3 > 26;
+    const hco3Low = hco3 < 22;
 
-    if (co2High && !hco3Low) {
-      primaryDisorder = '<span style="color:red; font-weight:900;">호흡성 산증</span>으로 해석됩니다.';;
-      nursingType = 'respiratory_acidosis';
-
-      const acuteExpected = 24 + ((co2 - 40) / 10) * 1;
-      const chronicExpected = 24 + ((co2 - 40) / 10) * 3.5;
-
-      const diffAcute = Math.abs(hco3 - acuteExpected);
-      const diffChronic = Math.abs(hco3 - chronicExpected);
-
-      if (diffAcute <= 2 && diffAcute < diffChronic) {
-        compensationText = `급성 호흡성 산증에 합당한 보상반응으로 보입니다. 예상 HCO₃⁻는 약 ${acuteExpected.toFixed(1)} mEq/L입니다.`;
-      } else if (diffChronic <= 3 && diffChronic < diffAcute) {
-        compensationText = `만성 호흡성 산증에 합당한 보상반응으로 보입니다. 예상 HCO₃⁻는 약 ${chronicExpected.toFixed(1)} mEq/L입니다.`;
+    if (phLow) {
+      if (co2High && !hco3Low) {
+        primaryDisorder = '<span class="result-acidosis">호흡성 산증</span>';
+        compensationText = 'PaCO₂ 상승이 핵심입니다.';
+        extraText = '환기 저하를 우선 의심합니다.';
+        nursingType = 'respiratory_acidosis';
+      } else if (hco3Low && !co2High) {
+        primaryDisorder = '<span class="result-acidosis">대사성 산증</span>';
+        compensationText = 'HCO₃⁻ 감소가 핵심입니다.';
+        extraText = '탈수, 설사, 쇼크, DKA, 신부전 등을 함께 평가합니다.';
+        nursingType = 'metabolic_acidosis';
+      } else if (co2High && hco3Low) {
+        primaryDisorder = '<span class="result-acidosis">혼합형 산증 의심</span>';
+        compensationText = '단순 보상으로 설명하기 어렵습니다.';
+        extraText = '호흡성 원인과 대사성 원인을 동시에 평가해야 합니다.';
+        nursingType = 'mixed_acidosis';
       } else {
-        compensationText = '예상 보상범위를 벗어나 혼합장애 가능성이 있습니다.';
+        primaryDisorder = '추가 판단 필요';
       }
-
-      extraText = 'PaCO₂ 상승이 산증 방향으로 작용하고 있습니다.';
-    }
-
-    else if (hco3Low && !co2High) {
-      primaryDisorder = '<span class="result-acidosis">대사성 산증</span>으로 해석됩니다.';
-      nursingType = 'metabolic_acidosis';
-
-      const winterLow = 1.5 * hco3 + 8 - 2;
-      const winterHigh = 1.5 * hco3 + 8 + 2;
-      const winterMid = 1.5 * hco3 + 8;
-
-      if (co2 >= winterLow && co2 <= winterHigh) {
-        compensationText = `Winter 공식상 적절한 호흡성 보상으로 보입니다. 예상 PaCO₂는 약 ${winterMid.toFixed(1)} mmHg입니다.`;
-      } else if (co2 > winterHigh) {
-        compensationText = `예상보다 PaCO₂가 높아 동반 호흡성 산증 가능성이 있습니다. 예상 PaCO₂ 범위는 ${winterLow.toFixed(1)} ~ ${winterHigh.toFixed(1)} mmHg입니다.`;
+    } else if (phHigh) {
+      if (co2Low && !hco3High) {
+        primaryDisorder = '<span class="result-alkalosis">호흡성 알칼리증</span>';
+        compensationText = 'PaCO₂ 감소가 핵심입니다.';
+        extraText = '과호흡, 불안, 통증, 발열 등을 확인합니다.';
+        nursingType = 'respiratory_alkalosis';
+      } else if (hco3High && !co2Low) {
+        primaryDisorder = '<span class="result-alkalosis">대사성 알칼리증</span>';
+        compensationText = 'HCO₃⁻ 증가가 핵심입니다.';
+        extraText = '구토, 위장관 흡인, 이뇨제 사용 여부를 확인합니다.';
+        nursingType = 'metabolic_alkalosis';
+      } else if (co2Low && hco3High) {
+        primaryDisorder = '<span class="result-alkalosis">혼합형 알칼리증 의심</span>';
+        compensationText = '단순 보상으로 설명하기 어렵습니다.';
+        extraText = '호흡성과 대사성 요인이 함께 있을 가능성을 고려합니다.';
+        nursingType = 'mixed_alkalosis';
       } else {
-        compensationText = `예상보다 PaCO₂가 낮아 동반 호흡성 알칼리증 가능성이 있습니다. 예상 PaCO₂ 범위는 ${winterLow.toFixed(1)} ~ ${winterHigh.toFixed(1)} mmHg입니다.`;
+        primaryDisorder = '추가 판단 필요';
       }
-
-      extraText = 'HCO₃⁻ 저하가 산증 방향으로 작용하고 있습니다.';
+    } else {
+      if (co2High && hco3High) {
+        primaryDisorder = '보상된 <span class="result-acidosis">호흡성 산증</span> 가능성';
+        compensationText = 'pH는 정상 범위지만 보상된 상태일 수 있습니다.';
+        extraText = 'PaCO₂와 HCO₃⁻가 모두 상승했습니다.';
+        nursingType = 'respiratory_acidosis';
+      } else if (co2Low && hco3Low) {
+        primaryDisorder = '보상된 <span class="result-alkalosis">호흡성 알칼리증</span> 가능성';
+        compensationText = 'pH는 정상 범위지만 보상된 상태일 수 있습니다.';
+        extraText = 'PaCO₂와 HCO₃⁻가 모두 감소했습니다.';
+        nursingType = 'respiratory_alkalosis';
+      } else {
+        primaryDisorder = '<span class="result-normal">뚜렷한 산-염기 장애가 보이지 않습니다.</span>';
+        compensationText = '정상 범위로 보입니다.';
+        extraText = '임상상과 함께 판단하세요.';
+        nursingType = 'unclear';
+      }
     }
 
-    else if (co2High && hco3Low) {
-      primaryDisorder = '<span class="result-acidosis">복합성 산증</span>이 의심됩니다.';
-      nursingType = 'mixed_acidosis';
-      compensationText = '단순 보상으로 설명하기 어렵습니다.';
-      extraText = 'PaCO₂ 상승과 HCO₃⁻ 저하가 동시에 산증 방향으로 작용하여 혼합장애 가능성이 큽니다.';
-    }
+    summaryText = `pH ${ph.toFixed(2)}, PaCO₂ ${co2.toFixed(1)} mmHg, HCO₃⁻ ${hco3.toFixed(1)} mEq/L`;
 
-    else {
-      primaryDisorder = '단순 패턴으로 분류되지 않아 추가 판단이 필요합니다.';
-      compensationText = '보상 여부를 단순하게 분류하기 어렵습니다.';
-      extraText = '임상 맥락과 추가 검사 결과를 함께 봐야 합니다.';
-    }
+    resultBox.innerHTML = `
+      <div class="result-badge">${primaryDisorder}</div>
+      <div class="result-section">
+        <div class="result-card main">
+          <div class="result-card-title">주된 해석</div>
+          <div class="result-card-body">${primaryDisorder}</div>
+        </div>
+        <div class="result-card comp">
+          <div class="result-card-title">보상 평가</div>
+          <div class="result-card-body">${compensationText}</div>
+        </div>
+        <div class="result-card extra">
+          <div class="result-card-title">추가 설명</div>
+          <div class="result-card-body">${extraText}</div>
+        </div>
+        <div class="result-card summary">
+          <div class="result-card-title">입력값 요약</div>
+          <div class="result-card-body">${summaryText}</div>
+        </div>
+      </div>
+    `;
+
+    renderNursingIntervention(nursingType);
   }
 
-  else if (phHigh) {
-    lines.push(`pH ${ph.toFixed(2)}로 알칼리증입니다.`);
-
-    if (co2Low && !hco3High) {
-      primaryDisorder = '<span class="result-alkalosis">호흡성 알칼리증</span>으로 해석됩니다.';
-      nursingType = 'respiratory_alkalosis';
-
-      const acuteExpected = 24 - ((40 - co2) / 10) * 2;
-      const chronicExpected = 24 - ((40 - co2) / 10) * 5;
-
-      const diffAcute = Math.abs(hco3 - acuteExpected);
-      const diffChronic = Math.abs(hco3 - chronicExpected);
-
-      if (diffAcute <= 2 && diffAcute < diffChronic) {
-        compensationText = `급성 호흡성 알칼리증에 합당한 보상반응으로 보입니다. 예상 HCO₃⁻는 약 ${acuteExpected.toFixed(1)} mEq/L입니다.`;
-      } else if (diffChronic <= 3 && diffChronic < diffAcute) {
-        compensationText = `만성 호흡성 알칼리증에 합당한 보상반응으로 보입니다. 예상 HCO₃⁻는 약 ${chronicExpected.toFixed(1)} mEq/L입니다.`;
-      } else {
-        compensationText = '예상 보상범위를 벗어나 혼합장애 가능성이 있습니다.';
-      }
-
-      extraText = 'PaCO₂ 저하가 알칼리 방향으로 작용하고 있습니다.';
-    }
-
-    else if (hco3High && !co2Low) {
-      primaryDisorder = '<span class="result-alkalosis">대사성 알칼리증</span>으로 해석됩니다.';
-      nursingType = 'metabolic_alkalosis';
-
-      const expectedLow = 0.7 * (hco3 - 24) + 40 - 5;
-      const expectedHigh = 0.7 * (hco3 - 24) + 40 + 5;
-      const expectedMid = 0.7 * (hco3 - 24) + 40;
-
-      if (co2 >= expectedLow && co2 <= expectedHigh) {
-        compensationText = `적절한 호흡성 보상으로 보입니다. 예상 PaCO₂는 약 ${expectedMid.toFixed(1)} mmHg입니다.`;
-      } else if (co2 > expectedHigh) {
-        compensationText = `예상보다 PaCO₂가 높아 동반 호흡성 산증 가능성이 있습니다. 예상 PaCO₂ 범위는 ${expectedLow.toFixed(1)} ~ ${expectedHigh.toFixed(1)} mmHg입니다.`;
-      } else {
-        compensationText = `예상보다 PaCO₂가 낮아 동반 호흡성 알칼리증 가능성이 있습니다. 예상 PaCO₂ 범위는 ${expectedLow.toFixed(1)} ~ ${expectedHigh.toFixed(1)} mmHg입니다.`;
-      }
-
-      extraText = 'HCO₃⁻ 상승이 알칼리 방향으로 작용하고 있습니다.';
-    }
-
-    else if (co2Low && hco3High) {
-      primaryDisorder = '<span class="result-alkalosis">복합성 알칼리증</span>이 의심됩니다.';
-      nursingType = 'mixed_alkalosis';
-      compensationText = '단순 보상으로 설명하기 어렵습니다.';
-      extraText = 'PaCO₂ 저하와 HCO₃⁻ 상승이 동시에 알칼리 방향으로 작용하여 혼합장애 가능성이 큽니다.';
-    }
-
-    else {
-      primaryDisorder = '단순 패턴으로 분류되지 않아 추가 판단이 필요합니다.';
-      compensationText = '보상 여부를 단순하게 분류하기 어렵습니다.';
-      extraText = '임상 맥락과 추가 검사 결과를 함께 봐야 합니다.';
-    }
-  }
-
-  else {
-    lines.push(`pH ${ph.toFixed(2)}로 정상 범위입니다.`);
-
-    if (co2High && hco3High) {
-  primaryDisorder = '보상된 <span class="result-acidosis">호흡성 산증</span> 또는 혼합장애 가능성이 있습니다.';
-  nursingType = 'respiratory_acidosis';
-} else if (co2Low && hco3Low) {
-  primaryDisorder = '보상된 <span class="result-alkalosis">호흡성 알칼리증</span> 또는 혼합장애 가능성이 있습니다.';
-  nursingType = 'respiratory_alkalosis';
-} else if (co2Low && hco3High) {
-  primaryDisorder = '<span class="result-alkalosis">혼합형 알칼리증</span> 가능성이 있습니다.';
-  nursingType = 'mixed_alkalosis';
-} else if (co2High && hco3Low) {
-  primaryDisorder = '<span class="result-acidosis">혼합형 산증</span> 가능성이 있습니다.';
-  nursingType = 'mixed_acidosis';
-} else {
-  primaryDisorder = '<span class="result-normal">뚜렷한 산-염기 장애가 보이지 않습니다.</span>';
-  nursingType = 'unclear';
-}
-
-    compensationText = 'pH가 정상이어도 보상된 장애가 숨어 있을 수 있습니다.';
-    extraText = 'PaCO₂와 HCO₃⁻를 함께 보고 혼합장애 가능성을 고려해야 합니다.';
-  }
-
-  summaryText = `pH ${ph.toFixed(2)}, PaCO₂ ${co2.toFixed(1)} mmHg, HCO₃⁻ ${hco3.toFixed(1)} mEq/L`;
-
-  const resultBadge = `<div class="result-badge">${primaryDisorder}</div>`;
-
-resultBox.innerHTML = `
-  ${resultBadge}
-
-  <div class="result-section">
-
-    <div class="result-card main">
-      <div class="result-card-title">주된 해석</div>
-      <div class="result-card-body">
-        ABGA 해석 결과, 위와 같은 산-염기 이상이 확인됩니다.
-      </div>
-    </div>
-
-    <div class="result-card comp">
-      <div class="result-card-title">보상 평가</div>
-      <div class="result-card-body">
-        ${compensationText}
-      </div>
-    </div>
-
-    <div class="result-card extra">
-      <div class="result-card-title">추가 설명</div>
-      <div class="result-card-body">
-        ${extraText}
-      </div>
-    </div>
-
-    <div class="result-card summary">
-      <div class="result-card-title">입력값 요약</div>
-      <div class="result-card-body">
-        ${summaryText}
-      </div>
-    </div>
-
-  </div>
-`;
-
-renderNursingIntervention(nursingType); 
-}
-
+  document.addEventListener('DOMContentLoaded', function() {
+    loadInterpretCase('case1');
     initializeQuiz();
-  </script>
+  });
+</script>
 </body>
 </html>
