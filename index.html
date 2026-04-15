@@ -783,6 +783,7 @@
   font-weight: 800;
   color: #123a63;
 }
+}
   
   </style>
 </head>
@@ -1602,42 +1603,42 @@ const interpretCases = {
   },
 
   case6: {
-    ph: "7.40",
-    co2: "40 mmHg",
-    hco3: "24 mEq/L",
-    po2: "55 mmHg",
-    guide: "예시 6: 산-염기 상태는 정상이지만 저산소증이 있는 패턴입니다. 산소화도 꼭 확인하세요.",
-    step1: [
-      { text: "산증", correct: false, msg: "pH 7.40은 정상 범위입니다." },
-      { text: "정상", correct: true, msg: "맞습니다. pH 7.40은 정상 범위입니다." },
-      { text: "알칼리증", correct: false, msg: "pH 7.40은 알칼리증이 아닙니다." }
-    ],
-    step2: [
-      { text: "상승", correct: false, msg: "PaCO₂ 40은 정상 범위입니다." },
-      { text: "정상", correct: true, msg: "맞습니다. PaCO₂ 40은 정상입니다." },
-      { text: "하강", correct: false, msg: "PaCO₂는 감소하지 않았습니다." }
-    ],
-    step3: [
-      { text: "상승", correct: false, msg: "HCO₃⁻ 24는 정상 범위입니다." },
-      { text: "정상", correct: true, msg: "맞습니다. HCO₃⁻ 24는 정상입니다." },
-      { text: "하강", correct: false, msg: "HCO₃⁻는 감소하지 않았습니다." }
-    ],
-    step4: [
-      { text: "정상", correct: false, msg: "PaO₂ 55는 정상 범위가 아닙니다." },
-      { text: "경계 저하", correct: false, msg: "PaO₂ 55는 경계 저하가 아니라 저산소증입니다." },
-      { text: "저산소증", correct: true, msg: "맞습니다. PaO₂ 55는 60 미만이므로 저산소증입니다." }
-    ],
-    step5: [
-      { text: "호흡성 산증 + 저산소증", correct: false, msg: "산-염기 상태는 정상이므로 해당되지 않습니다." },
-      { text: "대사성 산증", correct: false, msg: "산증 소견이 없습니다." },
-      { text: "호흡성 알칼리증", correct: false, msg: "알칼리증 소견이 없습니다." },
-      { text: "대사성 알칼리증", correct: false, msg: "알칼리증 소견이 없습니다." },
-      { text: "보상된 호흡성 산증", correct: false, msg: "해당되지 않습니다." },
-      { text: "정상 산-염기 + 저산소증", correct: true, msg: "정답입니다. 산-염기 수치는 정상이지만 PaO₂ 55로 저산소증이 있습니다." }
-    ]
-  }
+  ph: "7.40",
+  co2: "40 mmHg",
+  hco3: "24 mEq/L",
+  po2: "55 mmHg",
+  guide: "예시 6: 산-염기 상태는 정상이지만 저산소증이 있는 패턴입니다. 산소화도 꼭 확인하세요.",
+  step1: [
+    { text: "산증", correct: false, msg: "pH 7.40은 정상 범위입니다." },
+    { text: "정상", correct: true, msg: "맞습니다. pH 7.40은 정상 범위입니다." },
+    { text: "알칼리증", correct: false, msg: "pH 7.40은 알칼리증이 아닙니다." }
+  ],
+  step2: [
+    { text: "상승", correct: false, msg: "PaCO₂ 40은 정상 범위입니다." },
+    { text: "정상", correct: true, msg: "맞습니다. PaCO₂ 40은 정상입니다." },
+    { text: "하강", correct: false, msg: "PaCO₂는 감소하지 않았습니다." }
+  ],
+  step3: [
+    { text: "상승", correct: false, msg: "HCO₃⁻ 24는 정상 범위입니다." },
+    { text: "정상", correct: true, msg: "맞습니다. HCO₃⁻ 24는 정상입니다." },
+    { text: "하강", correct: false, msg: "HCO₃⁻는 감소하지 않았습니다." }
+  ],
+  step4: [
+    { text: "정상", correct: false, msg: "PaO₂ 55는 정상 범위가 아닙니다." },
+    { text: "경계 저하", correct: false, msg: "PaO₂ 55는 경계 저하가 아니라 저산소증입니다." },
+    { text: "저산소증", correct: true, msg: "맞습니다. PaO₂ 55는 60 미만이므로 저산소증입니다." }
+  ],
+  step5: [
+    { text: "호흡성 산증 + 저산소증", correct: false, msg: "산-염기 상태는 정상이므로 해당되지 않습니다." },
+    { text: "대사성 산증", correct: false, msg: "산증 소견이 없습니다." },
+    { text: "호흡성 알칼리증", correct: false, msg: "알칼리증 소견이 없습니다." },
+    { text: "대사성 알칼리증", correct: false, msg: "알칼리증 소견이 없습니다." },
+    { text: "보상된 호흡성 산증", correct: false, msg: "해당되지 않습니다." },
+    { text: "정상 산-염기 + 저산소증", correct: true, msg: "정답입니다. 산-염기 수치는 정상이지만 PaO₂ 55로 저산소증이 있습니다." }
+  ]
+},
 };
-
+    
 function renderInterpretOptions(containerId, feedbackId, options) {
   const container = document.getElementById(containerId);
   if (!container) return;
