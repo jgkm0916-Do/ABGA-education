@@ -987,29 +987,41 @@
   </div>
 </section>
 
-   <section id="compensation" class="panel">
+<section id="compensation" class="panel">
   <h2 class="section-title">산-염기 보상반응</h2>
-  <p class="section-desc">산-염기 보상반응은 문제 아닌 쪽이 반대로 움직이는 현상으로 이해하는 것이 가장 쉽습니다.</p>
+  <p class="section-desc">보상반응은 "문제가 아닌 쪽이 반대로 움직인다"로 이해하면 가장 쉽습니다.</p>
 
   <div class="grid-2">
     <div class="card">
       <h3>핵심 개념</h3>
-      <p><strong>호흡성 문제</strong>일 때는 HCO₃⁻가 반대로 움직일 수 있습니다.</p>
-      <p><strong>대사성 문제</strong>일 때는 PaCO₂가 반대로 움직일 수 있습니다.</p>
-      <p>보상반응이 있어도 pH가 완전히 정상으로 돌아오지 않을 수 있습니다.</p>
+      <p><strong>호흡성 문제</strong> → HCO₃⁻가 반대로 움직여 보상</p>
+      <p><strong>대사성 문제</strong> → PaCO₂가 반대로 움직여 보상</p>
+      <p>보상반응이 있어도 <strong>pH는 완전히 정상으로 돌아오지 않을 수 있습니다.</strong></p>
+      <p>👉 즉, pH + PaCO₂ + HCO₃⁻를 함께 봐야 합니다.</p>
     </div>
 
     <div class="card">
-      <h3>쉽게 기억하기</h3>
+      <h3>ROME 공식 (핵심)</h3>
       <div class="badge-row">
-        <span class="badge">문제 아닌 쪽이 반대로 움직이면 보상</span>
-        <span class="badge">호흡성 ↔ HCO₃⁻</span>
-        <span class="badge">대사성 ↔ PaCO₂</span>
+        <span class="badge">Respiratory Opposite</span>
+        <span class="badge">Metabolic Equal</span>
       </div>
+      <p><strong>호흡성:</strong> pH와 PaCO₂는 반대 방향</p>
+      <p><strong>대사성:</strong> pH와 HCO₃⁻는 같은 방향</p>
     </div>
   </div>
 
+  <div class="card" style="margin-top:14px;">
+    <h3>보상 정도 판단</h3>
+    <ul>
+      <li><strong>부분 보상:</strong> pH가 아직 정상 범위를 벗어남</li>
+      <li><strong>완전 보상:</strong> pH는 정상 범위지만 PaCO₂ 또는 HCO₃⁻는 비정상</li>
+      <li>👉 정상 pH라도 "정상"이 아니라 <strong>보상된 상태</strong>일 수 있음</li>
+    </ul>
+  </div>
+
   <div class="grid-2" style="margin-top:14px;">
+
     <div class="card">
       <h3>예시 1. 보상 있는 호흡성 산증</h3>
       <div class="abga-box">
@@ -1017,8 +1029,9 @@
         <div class="abga-chip"><strong>PaCO₂</strong>55</div>
         <div class="abga-chip"><strong>HCO₃⁻</strong>30</div>
       </div>
-      <p>PaCO₂는 산성 방향, HCO₃⁻는 알칼리 방향입니다.</p>
-      <p>문제 아닌 HCO₃⁻가 반대로 움직였으므로 <strong>보상 있음</strong>으로 볼 수 있습니다.</p>
+      <p>pH ↓ (산증), PaCO₂ ↑ → 호흡성 문제</p>
+      <p>HCO₃⁻ ↑ → 반대 방향 → 보상</p>
+      <p><strong>해석: 보상된 호흡성 산증 (부분 보상)</strong></p>
     </div>
 
     <div class="card">
@@ -1028,8 +1041,9 @@
         <div class="abga-chip"><strong>PaCO₂</strong>30</div>
         <div class="abga-chip"><strong>HCO₃⁻</strong>16</div>
       </div>
-      <p>HCO₃⁻는 산성 방향, PaCO₂는 알칼리 방향입니다.</p>
-      <p>문제 아닌 PaCO₂가 반대로 움직였으므로 <strong>보상 있음</strong>입니다.</p>
+      <p>pH ↓, HCO₃⁻ ↓ → 대사성 문제</p>
+      <p>PaCO₂ ↓ → 반대 방향 → 보상</p>
+      <p><strong>해석: 보상된 대사성 산증</strong></p>
     </div>
 
     <div class="card">
@@ -1039,8 +1053,9 @@
         <div class="abga-chip"><strong>PaCO₂</strong>30</div>
         <div class="abga-chip"><strong>HCO₃⁻</strong>20</div>
       </div>
-      <p>PaCO₂는 알칼리 방향, HCO₃⁻는 산성 방향입니다.</p>
-      <p>문제 아닌 HCO₃⁻가 반대로 움직였으므로 <strong>보상 있음</strong>입니다.</p>
+      <p>pH ↑, PaCO₂ ↓ → 호흡성 문제</p>
+      <p>HCO₃⁻ ↓ → 반대 방향 → 보상</p>
+      <p><strong>해석: 보상된 호흡성 알칼리증</strong></p>
     </div>
 
     <div class="card">
@@ -1050,9 +1065,20 @@
         <div class="abga-chip"><strong>PaCO₂</strong>48</div>
         <div class="abga-chip"><strong>HCO₃⁻</strong>30</div>
       </div>
-      <p>HCO₃⁻는 알칼리 방향, PaCO₂는 산성 방향입니다.</p>
-      <p>문제 아닌 PaCO₂가 반대로 움직였으므로 <strong>보상 있음</strong>입니다.</p>
+      <p>pH ↑, HCO₃⁻ ↑ → 대사성 문제</p>
+      <p>PaCO₂ ↑ → 반대 방향 → 보상</p>
+      <p><strong>해석: 보상된 대사성 알칼리증</strong></p>
     </div>
+
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>⚠️ 임상에서 꼭 기억</h3>
+    <ul>
+      <li>보상반응이 있다고 해서 문제가 해결된 것이 아님</li>
+      <li>항상 <strong>원인 질환 치료가 우선</strong></li>
+      <li>ABGA 해석 시 반드시 <strong>PaO₂(산소화 상태)도 함께 확인</strong></li>
+    </ul>
   </div>
 </section>
 
