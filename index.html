@@ -1917,13 +1917,21 @@ questionBank.push(
   const percent = Math.round((score / total) * 100);
 
   if (percent >= 90) {
-    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)\n아주 훌륭합니다! ABGA의 산-염기 해석, 산소화 평가, 임상 적용까지 잘 이해하고 있습니다. 실제 상황에서도 우선순위를 잘 판단할 수 있는 수준입니다.`;
+    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)
+
+아주 훌륭합니다! ABGA의 산-염기 해석, 산소화 평가, 임상 적용까지 잘 이해하고 있습니다. 실제 상황에서도 우선순위를 잘 판단할 수 있는 수준입니다.`;
   } else if (percent >= 70) {
-    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)\n좋습니다. 기본적인 해석 흐름은 잘 이해하고 있습니다. 다만 저산소증 판단, 보상반응, 우선 간호중재 부분은 한 번 더 복습하면 더 탄탄해집니다.`;
+    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)
+
+좋습니다. 기본적인 해석 흐름은 잘 이해하고 있습니다. 다만 저산소증 판단, 보상반응, 우선 간호중재 부분은 한 번 더 복습하면 더 탄탄해집니다.`;
   } else if (percent >= 50) {
-    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)\n기초 개념은 어느 정도 이해했지만, 해석 순서와 임상 적용 연습이 더 필요합니다. pH → PaCO₂ → HCO₃⁻ → PaO₂ 순서로 다시 복습해보세요.`;
+    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)
+
+기초 개념은 어느 정도 이해했지만, 해석 순서와 임상 적용 연습이 더 필요합니다. pH → PaCO₂ → HCO₃⁻ → PaO₂ 순서로 다시 복습해보세요.`;
   } else {
-    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)\n재학습이 필요합니다. 먼저 정상수치, 해석 순서, 호흡성/대사성 구분, PaO₂ 의미를 다시 정리한 뒤 퀴즈를 다시 풀어보는 것을 권장합니다.`;
+    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)
+
+재학습이 필요합니다. 먼저 정상수치, 해석 순서, 호흡성/대사성 구분, PaO₂ 의미를 다시 정리한 뒤 퀴즈를 다시 풀어보는 것을 권장합니다.`;
   }
 }
     function resetAdvancedABG() {
