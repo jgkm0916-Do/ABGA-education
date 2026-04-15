@@ -1358,30 +1358,38 @@
 </section>
 
     <section id="auto-advanced" class="panel">
-  <h2>자동 해석</h2>
-  <p class="auto-desc">
-    pH, PaCO₂, HCO₃⁻ 값을 입력하면 산-염기 장애와 보상반응을 교육용 기준으로 자동 해석합니다.
+  <h2 class="section-title">자동 해석</h2>
+  <p class="section-desc">
+    pH, PaCO₂, HCO₃⁻, PaO₂ 값을 입력하면 산-염기 이상과 산소화 상태를 함께 해석합니다.
+    자동 해석 결과는 참고용이며, 반드시 환자의 임상 상태와 함께 판단해야 합니다.
   </p>
 
   <div class="abga-auto-card">
     <div class="abga-input-grid">
       <div class="abga-input-item">
-  <label for="phInput">pH</label>
-  <div class="input-hint">정상범위 7.35 ~ 7.45</div>
-  <input type="number" id="phInput" step="0.01" placeholder="예: 7.28">
-</div>
-
-     <div class="abga-input-item">
-  <label for="co2Input">PaCO₂ (mmHg)</label>
-  <div class="input-hint">정상범위 35 ~ 45</div>
-  <input type="number" id="co2Input" step="0.1" placeholder="예: 55">
-</div>
+        <label for="phInput">pH</label>
+        <div class="input-hint">정상범위 7.35 ~ 7.45</div>
+        <input type="number" id="phInput" step="0.01" placeholder="예: 7.28">
+      </div>
 
       <div class="abga-input-item">
-  <label for="hco3Input">HCO₃⁻ (mEq/L)</label>
-  <div class="input-hint">정상범위 22 ~ 26</div>
-  <input type="number" id="hco3Input" step="0.1" placeholder="예: 24">
-</div>
+        <label for="co2Input">PaCO₂ (mmHg)</label>
+        <div class="input-hint">정상범위 35 ~ 45</div>
+        <input type="number" id="co2Input" step="0.1" placeholder="예: 55">
+      </div>
+
+      <div class="abga-input-item">
+        <label for="hco3Input">HCO₃⁻ (mEq/L)</label>
+        <div class="input-hint">정상범위 22 ~ 26</div>
+        <input type="number" id="hco3Input" step="0.1" placeholder="예: 18">
+      </div>
+
+      <div class="abga-input-item">
+        <label for="po2Input">PaO₂ (mmHg)</label>
+        <div class="input-hint">정상범위 80 ~ 100 / 60 미만 저산소증</div>
+        <input type="number" id="po2Input" step="0.1" placeholder="예: 58">
+      </div>
+    </div>
 
     <div class="abga-btn-row">
       <button class="analyze-btn" onclick="analyzeAdvancedABG()">해석하기</button>
@@ -1866,17 +1874,18 @@
   }
 
   function resetAdvancedABG() {
-    document.getElementById('phInput').value = '';
-    document.getElementById('co2Input').value = '';
-    document.getElementById('hco3Input').value = '';
-    document.getElementById('advancedResultBox').innerHTML = '';
+  document.getElementById('phInput').value = '';
+  document.getElementById('co2Input').value = '';
+  document.getElementById('hco3Input').value = '';
+  document.getElementById('po2Input').value = '';
+  document.getElementById('advancedResultBox').innerHTML = '';
 
-    const nursingBox = document.getElementById('nursingInterventionBox');
-    if (nursingBox) {
-      nursingBox.innerHTML = '';
-      nursingBox.style.display = 'none';
-    }
+  const nursingBox = document.getElementById('nursingInterventionBox');
+  if (nursingBox) {
+    nursingBox.innerHTML = '';
+    nursingBox.style.display = 'none';
   }
+}
 
   function renderNursingIntervention(type) {
     const nursingBox = document.getElementById('nursingInterventionBox');
@@ -1967,7 +1976,8 @@
             <div class="result-card-body">
               1. 단일 패턴으로 설명되지 않습니다.<br>
               2. 활력징후, 의식상태, 호흡양상, 원인 질환을 함께 확인합니다.<br>
-              3. 필요 시 ABGA 재검과 추가 검사를 진행합니다.
+              3. PaO₂가 낮으면 산소화 상태를 우선 확인합니다.<br>
+              4. 필요 시 ABGA 재검과 추가 검사를 진행합니다.
             </div>
           </div>
         </div>
@@ -1979,112 +1989,146 @@
   }
 
   function analyzeAdvancedABG() {
-    const ph = parseFloat(document.getElementById('phInput').value);
-    const co2 = parseFloat(document.getElementById('co2Input').value);
-    const hco3 = parseFloat(document.getElementById('hco3Input').value);
-    const resultBox = document.getElementById('advancedResultBox');
+  const ph = parseFloat(document.getElementById('phInput').value);
+  const co2 = parseFloat(document.getElementById('co2Input').value);
+  const hco3 = parseFloat(document.getElementById('hco3Input').value);
+  const po2 = parseFloat(document.getElementById('po2Input').value);
+  const resultBox = document.getElementById('advancedResultBox');
 
-    if (isNaN(ph) || isNaN(co2) || isNaN(hco3)) {
-      resultBox.innerHTML = '모든 값을 입력해주세요.';
-      return;
-    }
-
-    let primaryDisorder = '';
-    let compensationText = '';
-    let extraText = '';
-    let summaryText = '';
-    let nursingType = 'unclear';
-
-    const phLow = ph < 7.35;
-    const phHigh = ph > 7.45;
-    const co2High = co2 > 45;
-    const co2Low = co2 < 35;
-    const hco3High = hco3 > 26;
-    const hco3Low = hco3 < 22;
-
-    if (phLow) {
-      if (co2High && !hco3Low) {
-        primaryDisorder = '<span class="result-acidosis">호흡성 산증</span>';
-        compensationText = 'PaCO₂ 상승이 핵심입니다.';
-        extraText = '환기 저하를 우선 의심합니다.';
-        nursingType = 'respiratory_acidosis';
-      } else if (hco3Low && !co2High) {
-        primaryDisorder = '<span class="result-acidosis">대사성 산증</span>';
-        compensationText = 'HCO₃⁻ 감소가 핵심입니다.';
-        extraText = '탈수, 설사, 쇼크, DKA, 신부전 등을 함께 평가합니다.';
-        nursingType = 'metabolic_acidosis';
-      } else if (co2High && hco3Low) {
-        primaryDisorder = '<span class="result-acidosis">혼합형 산증 의심</span>';
-        compensationText = '단순 보상으로 설명하기 어렵습니다.';
-        extraText = '호흡성 원인과 대사성 원인을 동시에 평가해야 합니다.';
-        nursingType = 'mixed_acidosis';
-      } else {
-        primaryDisorder = '추가 판단 필요';
-      }
-    } else if (phHigh) {
-      if (co2Low && !hco3High) {
-        primaryDisorder = '<span class="result-alkalosis">호흡성 알칼리증</span>';
-        compensationText = 'PaCO₂ 감소가 핵심입니다.';
-        extraText = '과호흡, 불안, 통증, 발열 등을 확인합니다.';
-        nursingType = 'respiratory_alkalosis';
-      } else if (hco3High && !co2Low) {
-        primaryDisorder = '<span class="result-alkalosis">대사성 알칼리증</span>';
-        compensationText = 'HCO₃⁻ 증가가 핵심입니다.';
-        extraText = '구토, 위장관 흡인, 이뇨제 사용 여부를 확인합니다.';
-        nursingType = 'metabolic_alkalosis';
-      } else if (co2Low && hco3High) {
-        primaryDisorder = '<span class="result-alkalosis">혼합형 알칼리증 의심</span>';
-        compensationText = '단순 보상으로 설명하기 어렵습니다.';
-        extraText = '호흡성과 대사성 요인이 함께 있을 가능성을 고려합니다.';
-        nursingType = 'mixed_alkalosis';
-      } else {
-        primaryDisorder = '추가 판단 필요';
-      }
-    } else {
-      if (co2High && hco3High) {
-        primaryDisorder = '보상된 <span class="result-acidosis">호흡성 산증</span> 가능성';
-        compensationText = 'pH는 정상 범위지만 보상된 상태일 수 있습니다.';
-        extraText = 'PaCO₂와 HCO₃⁻가 모두 상승했습니다.';
-        nursingType = 'respiratory_acidosis';
-      } else if (co2Low && hco3Low) {
-        primaryDisorder = '보상된 <span class="result-alkalosis">호흡성 알칼리증</span> 가능성';
-        compensationText = 'pH는 정상 범위지만 보상된 상태일 수 있습니다.';
-        extraText = 'PaCO₂와 HCO₃⁻가 모두 감소했습니다.';
-        nursingType = 'respiratory_alkalosis';
-      } else {
-        primaryDisorder = '<span class="result-normal">뚜렷한 산-염기 장애가 보이지 않습니다.</span>';
-        compensationText = '정상 범위로 보입니다.';
-        extraText = '임상상과 함께 판단하세요.';
-        nursingType = 'unclear';
-      }
-    }
-
-    summaryText = `pH ${ph.toFixed(2)}, PaCO₂ ${co2.toFixed(1)} mmHg, HCO₃⁻ ${hco3.toFixed(1)} mEq/L`;
-
-    resultBox.innerHTML = `
-      <div class="result-badge">${primaryDisorder}</div>
-      <div class="result-section">
-        <div class="result-card main">
-          <div class="result-card-title">주된 해석</div>
-          <div class="result-card-body">${primaryDisorder}</div>
-        </div>
-        <div class="result-card comp">
-          <div class="result-card-title">보상 평가</div>
-          <div class="result-card-body">${compensationText}</div>
-        </div>
-        <div class="result-card extra">
-          <div class="result-card-title">추가 설명</div>
-          <div class="result-card-body">${extraText}</div>
-        </div>
-        <div class="result-card summary">
-          <div class="result-card-title">입력값 요약</div>
-          <div class="result-card-body">${summaryText}</div>
-        </div>
-      </div>
-    `;
-
-    renderNursingIntervention(nursingType);
+  if (isNaN(ph) || isNaN(co2) || isNaN(hco3) || isNaN(po2)) {
+    resultBox.innerHTML = '모든 값을 입력해주세요.';
+    return;
   }
+
+  let primaryDisorder = '';
+  let compensationText = '';
+  let extraText = '';
+  let oxygenText = '';
+  let summaryText = '';
+  let nursingType = 'unclear';
+
+  const phLow = ph < 7.35;
+  const phHigh = ph > 7.45;
+
+  const co2High = co2 > 45;
+  const co2Low = co2 < 35;
+
+  const hco3High = hco3 > 26;
+  const hco3Low = hco3 < 22;
+
+  // 산소화 평가
+  if (po2 < 60) {
+    oxygenText = `PaO₂ ${po2.toFixed(1)} mmHg로 저산소증입니다. 산소화 상태를 우선 확인해야 합니다.`;
+  } else if (po2 < 80) {
+    oxygenText = `PaO₂ ${po2.toFixed(1)} mmHg로 정상보다 낮은 편입니다. 산소화 저하 가능성을 관찰하세요.`;
+  } else {
+    oxygenText = `PaO₂ ${po2.toFixed(1)} mmHg로 산소화 상태는 정상 범위입니다.`;
+  }
+
+  // 산-염기 해석
+  if (phLow) {
+    if (co2High && !hco3Low) {
+      primaryDisorder = '<span class="result-acidosis">호흡성 산증</span>';
+      compensationText = 'PaCO₂ 상승이 핵심이며, 호흡성 원인을 우선 고려합니다.';
+      extraText = '저환기, 기도 문제, COPD 악화, 진정제 영향 등을 확인합니다.';
+      nursingType = 'respiratory_acidosis';
+    } else if (hco3Low && !co2High) {
+      primaryDisorder = '<span class="result-acidosis">대사성 산증</span>';
+      compensationText = 'HCO₃⁻ 감소가 핵심이며, 대사성 원인을 우선 고려합니다.';
+      extraText = '탈수, 설사, 쇼크, DKA, 신부전 등을 평가합니다.';
+      nursingType = 'metabolic_acidosis';
+    } else if (co2High && hco3Low) {
+      primaryDisorder = '<span class="result-acidosis">혼합형 산증 의심</span>';
+      compensationText = '단일 장애보다는 복합 이상 가능성을 고려해야 합니다.';
+      extraText = '호흡성과 대사성 원인을 동시에 평가해야 합니다.';
+      nursingType = 'mixed_acidosis';
+    } else {
+      primaryDisorder = '추가 판단 필요';
+      compensationText = '단순 패턴으로 분류하기 어렵습니다.';
+      extraText = '임상 상태와 재검 결과를 함께 판단하세요.';
+      nursingType = 'unclear';
+    }
+  } else if (phHigh) {
+    if (co2Low && !hco3High) {
+      primaryDisorder = '<span class="result-alkalosis">호흡성 알칼리증</span>';
+      compensationText = 'PaCO₂ 감소가 핵심이며, 과호흡 원인을 우선 고려합니다.';
+      extraText = '불안, 통증, 발열, 저산소증 동반 여부를 확인합니다.';
+      nursingType = 'respiratory_alkalosis';
+    } else if (hco3High && !co2Low) {
+      primaryDisorder = '<span class="result-alkalosis">대사성 알칼리증</span>';
+      compensationText = 'HCO₃⁻ 증가가 핵심이며, 대사성 원인을 우선 고려합니다.';
+      extraText = '구토, 위장관 흡인, 이뇨제 사용 여부를 확인합니다.';
+      nursingType = 'metabolic_alkalosis';
+    } else if (co2Low && hco3High) {
+      primaryDisorder = '<span class="result-alkalosis">혼합형 알칼리증 의심</span>';
+      compensationText = '단일 장애보다는 복합 이상 가능성을 고려해야 합니다.';
+      extraText = '호흡성과 대사성 원인을 함께 평가해야 합니다.';
+      nursingType = 'mixed_alkalosis';
+    } else {
+      primaryDisorder = '추가 판단 필요';
+      compensationText = '단순 패턴으로 분류하기 어렵습니다.';
+      extraText = '임상 상태와 재검 결과를 함께 판단하세요.';
+      nursingType = 'unclear';
+    }
+  } else {
+    if (co2High && hco3High) {
+      primaryDisorder = '보상된 <span class="result-acidosis">호흡성 산증</span> 가능성';
+      compensationText = 'pH는 정상 범위지만 보상된 상태일 수 있습니다.';
+      extraText = 'PaCO₂와 HCO₃⁻가 모두 상승했습니다.';
+      nursingType = 'respiratory_acidosis';
+    } else if (co2Low && hco3Low) {
+      primaryDisorder = '보상된 <span class="result-alkalosis">호흡성 알칼리증</span> 가능성';
+      compensationText = 'pH는 정상 범위지만 보상된 상태일 수 있습니다.';
+      extraText = 'PaCO₂와 HCO₃⁻가 모두 감소했습니다.';
+      nursingType = 'respiratory_alkalosis';
+    } else if (!co2High && !co2Low && !hco3High && !hco3Low) {
+      primaryDisorder = '<span class="result-normal">산-염기 상태는 정상 범위입니다.</span>';
+      compensationText = 'pH, PaCO₂, HCO₃⁻ 모두 정상 범위입니다.';
+      extraText = '다만 PaO₂는 반드시 별도로 확인해야 합니다.';
+      nursingType = 'unclear';
+    } else {
+      primaryDisorder = '보상된 장애 또는 혼합장애 가능성';
+      compensationText = '정상 pH라도 보상된 상태일 수 있습니다.';
+      extraText = 'PaCO₂와 HCO₃⁻를 함께 보고 해석해야 합니다.';
+      nursingType = 'unclear';
+    }
+  }
+
+  summaryText = `pH ${ph.toFixed(2)}, PaCO₂ ${co2.toFixed(1)} mmHg, HCO₃⁻ ${hco3.toFixed(1)} mEq/L, PaO₂ ${po2.toFixed(1)} mmHg`;
+
+  resultBox.innerHTML = `
+    <div class="result-badge">${primaryDisorder}</div>
+
+    <div class="result-section">
+      <div class="result-card main">
+        <div class="result-card-title">주된 해석</div>
+        <div class="result-card-body">${primaryDisorder}</div>
+      </div>
+
+      <div class="result-card comp">
+        <div class="result-card-title">보상 / 해석 포인트</div>
+        <div class="result-card-body">${compensationText}</div>
+      </div>
+
+      <div class="result-card extra">
+        <div class="result-card-title">추가 설명</div>
+        <div class="result-card-body">${extraText}</div>
+      </div>
+
+      <div class="result-card summary">
+        <div class="result-card-title">산소화 상태</div>
+        <div class="result-card-body">${oxygenText}</div>
+      </div>
+
+      <div class="result-card summary">
+        <div class="result-card-title">입력값 요약</div>
+        <div class="result-card-body">${summaryText}</div>
+      </div>
+    </div>
+  `;
+
+  renderNursingIntervention(nursingType);
+}
 
   document.addEventListener('DOMContentLoaded', function() {
     loadInterpretCase('case1');
