@@ -1324,32 +1324,35 @@
   </div>
 </section>
 
-    <section id="quiz" class="panel">
-      <h2 class="section-title">퀴즈</h2>
-      <p class="section-desc">문제은행 50문항 중 랜덤으로 10문항이 출제됩니다. 단순 해석, 보상반응, 개념, 임상 케이스 문제가 섞여 나옵니다.</p>
+   <section id="quiz" class="panel">
+  <h2 class="section-title">퀴즈</h2>
+  <p class="section-desc">
+    문제은행에서 랜덤으로 10문항이 출제됩니다. 
+    산-염기 해석, 환기와 산소화, 보상반응, 임상 케이스, 간호중재 문제가 섞여 나옵니다.
+  </p>
 
-      <div class="quiz-meta">
-        <div class="meta-pill" id="quizProgress">문항 1 / 10</div>
-        <div class="meta-pill" id="quizScore">점수 0점</div>
-      </div>
+  <div class="quiz-meta">
+    <div class="meta-pill" id="quizProgress">문항 1 / 10</div>
+    <div class="meta-pill" id="quizScore">점수 0점</div>
+  </div>
 
-      <div class="quiz-card">
-        <div class="quiz-type" id="quizType">유형</div>
-        <div class="quiz-question" id="quizQuestion"></div>
-        <div class="choice-list" id="quizChoices"></div>
-        <div class="quiz-feedback" id="quizFeedback"></div>
+  <div class="quiz-card">
+    <div class="quiz-type" id="quizType">유형</div>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div class="choice-list" id="quizChoices"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
 
-        <div class="btn-row">
-          <button class="btn btn-primary" id="nextBtn" onclick="nextQuizQuestion()" style="display:none;">다음 문제</button>
-          <button class="btn btn-secondary" onclick="restartQuiz()">처음부터 다시</button>
-        </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuizQuestion()" style="display:none;">다음 문제</button>
+      <button class="btn btn-secondary" onclick="restartQuiz()">처음부터 다시</button>
+    </div>
 
-        <div class="result-box" id="resultBox">
-          <h3>퀴즈 완료</h3>
-          <p id="resultText"></p>
-        </div>
-      </div>
-    </section>
+    <div class="result-box" id="resultBox">
+      <h3>퀴즈 완료</h3>
+      <p id="resultText"></p>
+    </div>
+  </div>
+</section>
 
     <section id="auto-advanced" class="panel">
   <h2>자동 해석</h2>
@@ -1729,6 +1732,80 @@ function loadInterpretCase(caseKey) {
       { type: "개념", q: "다음 중 pH를 완전히 정상으로 되돌리지 못할 수 있는 것은?", choices: ["보상반응", "정상 호흡", "정상 대사", "수분섭취"], answer: 0, exp: "보상반응이 있어도 pH가 완전히 정상으로 돌아오지 않을 수 있습니다." },
       { type: "단순 해석", q: "pH 7.29 / PaCO₂ 57 / HCO₃⁻ 26 의 해석은?", choices: ["호흡성 산증", "대사성 산증", "정상", "호흡성 알칼리증"], answer: 0, exp: "pH는 산증, PaCO₂ 증가는 같은 방향으로 호흡성 산증입니다." },
       { type: "단순 해석", q: "pH 7.45 / PaCO₂ 28 / HCO₃⁻ 19 의 상황을 볼 때 고려할 것은?", choices: ["보상된 이상 가능성", "항상 정상", "해석 불필요", "대사성 알칼리증 확정"], answer: 0, exp: "pH가 정상 상한에 있어도 CO₂와 HCO₃⁻ 이상이 있으면 보상된 상태를 생각해야 합니다." }
+    // ===== 추가 문제 (산소화 / 환기 / 간호중재 강화) =====
+
+questionBank.push(
+  {
+    type: "산소화",
+    q: "PaO₂ 55 mmHg의 의미로 가장 적절한 것은?",
+    choices: ["정상", "경계 저하", "저산소증", "과환기"],
+    answer: 2,
+    exp: "PaO₂ 60 mmHg 미만은 저산소증으로 판단합니다."
+  },
+  {
+    type: "산소화",
+    q: "ABGA에서 산소화 상태를 평가하는 가장 중요한 수치는?",
+    choices: ["pH", "PaCO₂", "HCO₃⁻", "PaO₂"],
+    answer: 3,
+    exp: "PaO₂는 산소화 상태를 직접적으로 반영합니다."
+  },
+  {
+    type: "환기",
+    q: "PaCO₂가 60 mmHg로 상승했을 때 의미는?",
+    choices: ["과환기", "저환기", "정상", "산소 부족"],
+    answer: 1,
+    exp: "PaCO₂ 상승은 CO₂가 축적된 상태로 저환기를 의미합니다."
+  },
+  {
+    type: "임상 판단",
+    q: "pH 정상, PaCO₂ 정상, HCO₃⁻ 정상, PaO₂ 55. 가장 중요한 문제는?",
+    choices: ["산증", "알칼리증", "저산소증", "보상반응"],
+    answer: 2,
+    exp: "산염기보다 PaO₂ 저하가 우선 문제입니다."
+  },
+  {
+    type: "임상 판단",
+    q: "COPD 환자에서 pH 7.33 / PaCO₂ 60 / HCO₃⁻ 32 / PaO₂ 56. 가장 우선 중재는?",
+    choices: ["수액 투여", "진정제 투여", "환기 개선", "식이 조절"],
+    answer: 2,
+    exp: "CO₂ 저류 + 저산소증 → 환기 개선이 최우선입니다."
+  },
+  {
+    type: "간호중재",
+    q: "대사성 산증 환자에서 가장 우선 확인해야 할 것은?",
+    choices: ["피부색", "체온", "순환 상태", "시력"],
+    answer: 2,
+    exp: "대사성 산증은 쇼크/저관류와 연결되므로 순환 상태가 중요합니다."
+  },
+  {
+    type: "간호중재",
+    q: "호흡성 산증 환자에서 가장 우선 중재는?",
+    choices: ["수분 공급", "환기 개선", "진정", "식이 조절"],
+    answer: 1,
+    exp: "호흡성 산증은 CO₂ 축적 → 환기 개선이 핵심입니다."
+  },
+  {
+    type: "간호중재",
+    q: "저산소증(PaO₂ < 60) 환자에서 가장 먼저 고려할 중재는?",
+    choices: ["이뇨제", "항생제", "산소 투여", "운동"],
+    answer: 2,
+    exp: "저산소증은 산소 공급이 우선입니다."
+  },
+  {
+    type: "임상 케이스",
+    q: "폐렴 환자, pH 정상 / PaO₂ 58. 가장 중요한 문제는?",
+    choices: ["대사성 산증", "호흡성 산증", "저산소증", "보상반응"],
+    answer: 2,
+    exp: "산염기보다 산소화 문제가 우선입니다."
+  },
+  {
+    type: "개념",
+    q: "다음 중 보상반응 판단에 직접적으로 사용되지 않는 것은?",
+    choices: ["pH", "PaCO₂", "HCO₃⁻", "PaO₂"],
+    answer: 3,
+    exp: "PaO₂는 산소화 평가용이며 보상 판단 지표가 아닙니다."
+  }
+);
     ];
 
     let quizData = [];
@@ -1827,7 +1904,7 @@ function loadInterpretCase(caseKey) {
       const correctCount = score / 10;
       resultBox.style.display = "block";
       document.getElementById("resultText").textContent =
-        `총 ${quizData.length}문항 중 ${correctCount}문항 정답, 최종 점수는 ${score}점입니다.`;
+  getQuizResultMessage(correctCount, quizData.length);
     }
 
     function restartQuiz() {
@@ -1835,6 +1912,20 @@ function loadInterpretCase(caseKey) {
       loadInterpretCase("case1");
     
     }
+
+    function getQuizResultMessage(score, total) {
+  const percent = Math.round((score / total) * 100);
+
+  if (percent >= 90) {
+    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)\n아주 훌륭합니다! ABGA의 산-염기 해석, 산소화 평가, 임상 적용까지 잘 이해하고 있습니다. 실제 상황에서도 우선순위를 잘 판단할 수 있는 수준입니다.`;
+  } else if (percent >= 70) {
+    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)\n좋습니다. 기본적인 해석 흐름은 잘 이해하고 있습니다. 다만 저산소증 판단, 보상반응, 우선 간호중재 부분은 한 번 더 복습하면 더 탄탄해집니다.`;
+  } else if (percent >= 50) {
+    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)\n기초 개념은 어느 정도 이해했지만, 해석 순서와 임상 적용 연습이 더 필요합니다. pH → PaCO₂ → HCO₃⁻ → PaO₂ 순서로 다시 복습해보세요.`;
+  } else {
+    return `총 ${total}문항 중 ${score}문항 정답 (${percent}점)\n재학습이 필요합니다. 먼저 정상수치, 해석 순서, 호흡성/대사성 구분, PaO₂ 의미를 다시 정리한 뒤 퀴즈를 다시 풀어보는 것을 권장합니다.`;
+  }
+}
     function resetAdvancedABG() {
   document.getElementById('phInput').value = '';
   document.getElementById('co2Input').value = '';
