@@ -1194,6 +1194,7 @@
     </div>
 
     <div id="advancedResultBox" class="advanced-result-box"></div>
+    <div id="nursingInterventionBox" class="advanced-result-box" style="display:none; margin-top:12px;"></div>
   </div>
 </section>
 
@@ -1512,8 +1513,145 @@ function loadInterpretCase(caseKey) {
   document.getElementById('co2Input').value = '';
   document.getElementById('hco3Input').value = '';
   document.getElementById('advancedResultBox').innerHTML = '';
-}
 
+  const nursingBox = document.getElementById('nursingInterventionBox');
+  if (nursingBox) {
+    nursingBox.innerHTML = '';
+    nursingBox.style.display = 'none';
+  }
+}
+function renderNursingIntervention(type) {
+  const nursingBox = document.getElementById('nursingInterventionBox');
+
+  const nursingMap = {
+    respiratory_acidosis: {
+      title: '추천 간호중재',
+      body: `
+        <div class="result-section">
+          <div class="result-card main">
+            <div class="result-card-title">호흡성 산증</div>
+            <div class="result-card-body">
+              1. 호흡수, SpO₂, 호흡양상, 의식상태를 우선 사정합니다.<br>
+              2. 기도 유지 여부와 분비물 저류를 확인합니다.<br>
+              3. 처방된 산소요법, 흡인, 환기보조 필요성을 확인합니다.<br>
+              4. ABGA 재검 시점과 변화 추이를 확인합니다.<br>
+              5. 저환기, COPD 악화, 진정제 영향 등 원인을 함께 평가합니다.
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    respiratory_alkalosis: {
+      title: '추천 간호중재',
+      body: `
+        <div class="result-section">
+          <div class="result-card comp">
+            <div class="result-card-title">호흡성 알칼리증</div>
+            <div class="result-card-body">
+              1. 과호흡 여부와 호흡수를 확인합니다.<br>
+              2. 불안, 통증, 발열, 저산소증 등 원인을 사정합니다.<br>
+              3. 안정된 환경을 제공하고 호흡을 천천히 하도록 돕습니다.<br>
+              4. 산소 과다 투여 여부를 확인합니다.<br>
+              5. 증상이 지속되면 ABGA 재평가 및 의료진 보고를 시행합니다.
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    metabolic_acidosis: {
+      title: '추천 간호중재',
+      body: `
+        <div class="result-section">
+          <div class="result-card extra">
+            <div class="result-card-title">대사성 산증</div>
+            <div class="result-card-body">
+              1. 탈수, 설사, 쇼크, DKA, 신부전 등 원인을 확인합니다.<br>
+              2. 활력징후와 말초관류 상태를 사정합니다.<br>
+              3. 수액요법 및 처방된 치료를 준비하고 투여 상태를 확인합니다.<br>
+              4. Kussmaul 호흡 등 보상성 호흡양상을 관찰합니다.<br>
+              5. 전해질, 특히 K⁺ 변화와 혈당을 함께 확인합니다.
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    metabolic_alkalosis: {
+      title: '추천 간호중재',
+      body: `
+        <div class="result-section">
+          <div class="result-card summary">
+            <div class="result-card-title">대사성 알칼리증</div>
+            <div class="result-card-body">
+              1. 반복 구토, 위장관 흡인, 이뇨제 사용 여부를 확인합니다.<br>
+              2. 탈수와 전해질 이상, 특히 저칼륨혈증 가능성을 사정합니다.<br>
+              3. 수액 및 전해질 보충 처방을 확인합니다.<br>
+              4. 호흡 억제나 저환기 여부를 관찰합니다.<br>
+              5. 증상 변화와 ABGA 추이를 함께 관찰합니다.
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    mixed_acidosis: {
+      title: '추천 간호중재',
+      body: `
+        <div class="result-section">
+          <div class="result-card main">
+            <div class="result-card-title">혼합형 산증 의심</div>
+            <div class="result-card-body">
+              1. 상태 악화 가능성이 높으므로 활력징후와 의식상태를 우선 확인합니다.<br>
+              2. 호흡기 원인과 대사성 원인을 동시에 평가합니다.<br>
+              3. ABGA 재검 및 원인 교정을 위한 협업이 필요합니다.<br>
+              4. 즉시 의료진에게 보고하고 추가 처치를 준비합니다.
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    mixed_alkalosis: {
+      title: '추천 간호중재',
+      body: `
+        <div class="result-section">
+          <div class="result-card comp">
+            <div class="result-card-title">혼합형 알칼리증 의심</div>
+            <div class="result-card-body">
+              1. 과호흡과 대사성 원인을 함께 평가합니다.<br>
+              2. 통증, 불안, 구토, 위장관 흡인, 이뇨제 사용 여부를 확인합니다.<br>
+              3. ABGA와 전해질 결과를 함께 재평가합니다.<br>
+              4. 원인 교정과 증상 완화를 위해 의료진과 협업합니다.
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    unclear: {
+      title: '추천 간호중재',
+      body: `
+        <div class="result-section">
+          <div class="result-card summary">
+            <div class="result-card-title">추가 평가 필요</div>
+            <div class="result-card-body">
+              1. 단일 패턴으로 설명되지 않으므로 전체 임상상과 함께 판단합니다.<br>
+              2. 활력징후, 의식상태, 호흡양상, 원인 질환을 함께 확인합니다.<br>
+              3. 필요 시 ABGA 재검과 추가 검사 결과를 확인합니다.
+            </div>
+          </div>
+        </div>
+      `
+    }
+  };
+
+  const selected = nursingMap[type] || nursingMap.unclear;
+  nursingBox.innerHTML = selected.body;
+  nursingBox.style.display = 'block';
+}
+    
 function analyzeAdvancedABG() {
   const ph = parseFloat(document.getElementById('phInput').value);
   const co2 = parseFloat(document.getElementById('co2Input').value);
@@ -1530,6 +1668,7 @@ function analyzeAdvancedABG() {
   let compensationText = '';
   let extraText = '';
   let summaryText = '';
+  let nursingType = 'unclear';
 
   const phLow = ph < 7.35;
   const phHigh = ph > 7.45;
@@ -1545,6 +1684,7 @@ function analyzeAdvancedABG() {
 
     if (co2High && !hco3Low) {
       primaryDisorder = '<span style="color:red; font-weight:900;">호흡성 산증</span>으로 해석됩니다.';;
+      nursingType = 'respiratory_acidosis';
 
       const acuteExpected = 24 + ((co2 - 40) / 10) * 1;
       const chronicExpected = 24 + ((co2 - 40) / 10) * 3.5;
@@ -1565,6 +1705,7 @@ function analyzeAdvancedABG() {
 
     else if (hco3Low && !co2High) {
       primaryDisorder = '<span class="result-acidosis">대사성 산증</span>으로 해석됩니다.';
+      nursingType = 'metabolic_acidosis';
 
       const winterLow = 1.5 * hco3 + 8 - 2;
       const winterHigh = 1.5 * hco3 + 8 + 2;
@@ -1583,6 +1724,7 @@ function analyzeAdvancedABG() {
 
     else if (co2High && hco3Low) {
       primaryDisorder = '<span class="result-acidosis">복합성 산증</span>이 의심됩니다.';
+      nursingType = 'mixed_acidosis';
       compensationText = '단순 보상으로 설명하기 어렵습니다.';
       extraText = 'PaCO₂ 상승과 HCO₃⁻ 저하가 동시에 산증 방향으로 작용하여 혼합장애 가능성이 큽니다.';
     }
@@ -1599,6 +1741,7 @@ function analyzeAdvancedABG() {
 
     if (co2Low && !hco3High) {
       primaryDisorder = '<span class="result-alkalosis">호흡성 알칼리증</span>으로 해석됩니다.';
+      nursingType = 'respiratory_alkalosis';
 
       const acuteExpected = 24 - ((40 - co2) / 10) * 2;
       const chronicExpected = 24 - ((40 - co2) / 10) * 5;
@@ -1619,6 +1762,7 @@ function analyzeAdvancedABG() {
 
     else if (hco3High && !co2Low) {
       primaryDisorder = '<span class="result-alkalosis">대사성 알칼리증</span>으로 해석됩니다.';
+      nursingType = 'metabolic_alkalosis';
 
       const expectedLow = 0.7 * (hco3 - 24) + 40 - 5;
       const expectedHigh = 0.7 * (hco3 - 24) + 40 + 5;
@@ -1637,6 +1781,7 @@ function analyzeAdvancedABG() {
 
     else if (co2Low && hco3High) {
       primaryDisorder = '<span class="result-alkalosis">복합성 알칼리증</span>이 의심됩니다.';
+      nursingType = 'mixed_alkalosis';
       compensationText = '단순 보상으로 설명하기 어렵습니다.';
       extraText = 'PaCO₂ 저하와 HCO₃⁻ 상승이 동시에 알칼리 방향으로 작용하여 혼합장애 가능성이 큽니다.';
     }
@@ -1652,16 +1797,21 @@ function analyzeAdvancedABG() {
     lines.push(`pH ${ph.toFixed(2)}로 정상 범위입니다.`);
 
     if (co2High && hco3High) {
-      primaryDisorder = '보상된 <span class="result-acidosis">호흡성 산증</span> 또는 혼합장애 가능성이 있습니다.';
-    } else if (co2Low && hco3Low) {
-      primaryDisorder = '보상된 <span class="result-alkalosis">호흡성 알칼리증</span> 또는 혼합장애 가능성이 있습니다.';
-    } else if (co2Low && hco3High) {
-      primaryDisorder = '<span class="result-alkalosis">혼합형 알칼리증</span> 가능성이 있습니다.';
-    } else if (co2High && hco3Low) {
-      primaryDisorder = '<span class="result-acidosis">혼합형 산증</span> 가능성이 있습니다.';
-    } else {
-      primaryDisorder = '<span class="result-normal">뚜렷한 산-염기 장애가 보이지 않습니다.</span>';
-    }
+  primaryDisorder = '보상된 <span class="result-acidosis">호흡성 산증</span> 또는 혼합장애 가능성이 있습니다.';
+  nursingType = 'respiratory_acidosis';
+} else if (co2Low && hco3Low) {
+  primaryDisorder = '보상된 <span class="result-alkalosis">호흡성 알칼리증</span> 또는 혼합장애 가능성이 있습니다.';
+  nursingType = 'respiratory_alkalosis';
+} else if (co2Low && hco3High) {
+  primaryDisorder = '<span class="result-alkalosis">혼합형 알칼리증</span> 가능성이 있습니다.';
+  nursingType = 'mixed_alkalosis';
+} else if (co2High && hco3Low) {
+  primaryDisorder = '<span class="result-acidosis">혼합형 산증</span> 가능성이 있습니다.';
+  nursingType = 'mixed_acidosis';
+} else {
+  primaryDisorder = '<span class="result-normal">뚜렷한 산-염기 장애가 보이지 않습니다.</span>';
+  nursingType = 'unclear';
+}
 
     compensationText = 'pH가 정상이어도 보상된 장애가 숨어 있을 수 있습니다.';
     extraText = 'PaCO₂와 HCO₃⁻를 함께 보고 혼합장애 가능성을 고려해야 합니다.';
@@ -1692,6 +1842,7 @@ function analyzeAdvancedABG() {
       </div>
     </div>
   `;
+  renderNursingIntervention(nursingType); 
 }
 
     initializeQuiz();
