@@ -1099,7 +1099,6 @@
    function showTab(tabId, el) {
   document.querySelectorAll(".panel").forEach(panel => {
     panel.classList.remove("active");
-    panel.style.display = "none";
   });
 
   document.querySelectorAll(".tab-btn").forEach(btn => {
@@ -1109,7 +1108,6 @@
   const target = document.getElementById(tabId);
   if (target) {
     target.classList.add("active");
-    target.style.display = "block";
   }
 
   if (el) {
@@ -1318,7 +1316,7 @@ function analyzeAdvancedABG() {
     lines.push(`pH ${ph.toFixed(2)}로 산증입니다.`);
 
     if (co2High && !hco3Low) {
-      primaryDisorder = ''<span style="color:red; font-weight:900;">호흡성 산증</span>으로 해석됩니다.';
+      primaryDisorder = '<span style="color:red; font-weight:900;">호흡성 산증</span>으로 해석됩니다.';;
 
       const acuteExpected = 24 + ((co2 - 40) / 10) * 1;
       const chronicExpected = 24 + ((co2 - 40) / 10) * 3.5;
