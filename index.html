@@ -791,17 +791,17 @@
 </head>
 <body>
   <div class="container">
-    <div class="top-banner">대전보훈병원 간호교육실</div>
+    <div class="top-banner">대전훈병원 간호교육실</div>
 
     <section class="hero">
       <h1>ABGA 교육 모듈</h1>
-      <p>기초 이해부터 임상 적용까지 단계적으로 학습하는      대전보훈병원 간호사 대상 ABGA 교육용 웹앱입니다.</p>
+      <p>기초 이해부터 임상 적용까지 단계적으로 학습하는      대전훈병원 간호사 대상 ABGA 교육용 웹앱입니다.</p>
     </section>
 
     <div class="tab-bar">
       <button class="tab-btn active" onclick="showTab('basic', this)">기초 학습</button>
       <button class="tab-btn" onclick="showTab('interpret', this)">해석 훈련</button>
-      <button class="tab-btn" onclick="showTab('compensation', this)">보상반응</button>
+      <button class="tab-btn" onclick="showTab('compensation', this)">상반응</button>
       <button class="tab-btn" onclick="showTab('cases', this)">임상 케이스</button>
       <button class="tab-btn" onclick="showTab('nursing', this)">간호 중재</button>
       <button class="tab-btn" onclick="showTab('quiz', this)">퀴즈</button>
@@ -809,12 +809,12 @@
     </div>
     <section id="basic" class="panel active">
   <h2 class="section-title">기초 학습</h2>
-  <p class="section-desc">ABGA 해석 전에 꼭 알아야 할 기본 개념을 먼저 정리합니다.</p>
+  <p class="section-desc">ABGA 해석 전에 꼭 알아야 할 기 개념을 먼저 정리합니다.</p>
 
   <!-- 정상수치표 -->
   <details class="edu-item" open>
     <summary>정상수치 정리</summary>
-    <p class="table-description">ABGA 해석 전에 반드시 확인해야 하는 기본 정상 범위입니다.</p>
+    <p class="table-description">ABGA 해석 전에 반드시 확인해야 하는 기 정상 범위입니다.</p>
 
     <div class="abga-table-box">
       <table class="abga-table-fixed">
@@ -871,7 +871,7 @@
   <strong>*Tip! ROME 공식:</strong><br>
   <span class="rome-line">Respiratory Opposite (호흡성은 pH와 반대 방향: pH↓ 이면 PaCO₂↑)</span><br>
   <span class="rome-line">Metabolic Equal (대사성은 pH와 같은 방향: pH↓ 이면 HCO₃⁻↓)</span>
-          <p>※ 빠르게 보기</p>
+          <p>※ 빠르게 기</p>
 <p>- pH↓ + PaCO₂↑ → 호흡성 산증</p>
 <p>- pH↑ + PaCO₂↓ → 호흡성 알칼리증</p>
 <p>- pH↓ + HCO₃⁻↓ → 대사성 산증</p>
@@ -930,7 +930,7 @@
       <button class="option-btn" onclick="loadInterpretCase('case2')">예시 2. 대사성 산증</button>
       <button class="option-btn" onclick="loadInterpretCase('case3')">예시 3. 호흡성 알칼리증</button>
       <button class="option-btn" onclick="loadInterpretCase('case4')">예시 4. 대사성 알칼리증</button>
-      <button class="option-btn" onclick="loadInterpretCase('case5')">예시 5. 보상된 호흡성 산증</button>
+      <button class="option-btn" onclick="loadInterpretCase('case5')">예시 5. 상된 호흡성 산증</button>
       <button class="option-btn" onclick="loadInterpretCase('case6')">예시 6. 정상 산-염기 + 저산소증</button>
     </div>
   </div>
@@ -944,7 +944,7 @@
         <div class="abga-chip"><strong>HCO₃⁻</strong><span id="iHco3">24 mEq/L</span></div>
         <div class="abga-chip"><strong>PaO₂</strong><span id="iPo2">58 mmHg</span></div>
       </div>
-      <p id="interpretGuide">위 수치를 보고 단계별로 해석해보세요.</p>
+      <p id="interpretGuide">위 수치를 고 단계별로 해석해세요.</p>
     </div>
 
     <div class="card">
@@ -997,8 +997,8 @@
   <div class="grid-2">
     <div class="card">
       <h3>핵심 개념</h3>
-      <p><strong>호흡성 문제</strong> → HCO₃⁻가 반대로 움직여 보상</p>
-      <p><strong>대사성 문제</strong> → PaCO₂가 반대로 움직여 보상</p>
+      <p><strong>호흡성 문제</strong> → PaCO₂ 이상이 먼저 발생 → HCO₃⁻가 보상</p>
+      <p><strong>대사성 문제</strong> → HCO₃⁻ 이상이 먼저 발생 → PaCO₂가 보상</p>
       <p>보상반응이 있어도 <strong>pH는 완전히 정상으로 돌아오지 않을 수 있습니다.</strong></p>
       <p>👉 즉, pH + PaCO₂ + HCO₃⁻를 함께 봐야 합니다.</p>
     </div>
@@ -1046,7 +1046,7 @@
       </div>
       <p>pH ↓, HCO₃⁻ ↓ → 대사성 문제</p>
       <p>PaCO₂ ↓ → 반대 방향 → 보상</p>
-      <p><strong>해석: 보상된 대사성 산증</strong></p>
+      <p><strong>해석: 보상된 대사성 산증 (부분 보상)</strong></p>
     </div>
 
     <div class="card">
@@ -1058,7 +1058,7 @@
       </div>
       <p>pH ↑, PaCO₂ ↓ → 호흡성 문제</p>
       <p>HCO₃⁻ ↓ → 반대 방향 → 보상</p>
-      <p><strong>해석: 보상된 호흡성 알칼리증</strong></p>
+      <p><strong>해석: 보상된 호흡성 알칼리증 (부분 보상)</strong></p>
     </div>
 
     <div class="card">
@@ -1070,7 +1070,7 @@
       </div>
       <p>pH ↑, HCO₃⁻ ↑ → 대사성 문제</p>
       <p>PaCO₂ ↑ → 반대 방향 → 보상</p>
-      <p><strong>해석: 보상된 대사성 알칼리증</strong></p>
+      <p><strong>해석: 보상된 대사성 알칼리증 (부분 보상)</strong></p>
     </div>
 
   </div>
